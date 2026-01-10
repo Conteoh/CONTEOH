@@ -97,3 +97,4 @@ if (isset($_SERVER['HTTP_HOST'])) {
 }
 define('BASEURL', $baseurl);
 define('BACKEND_PORTAL', 'backend_portal');
+define('BACKEND_API', 'backend_api');

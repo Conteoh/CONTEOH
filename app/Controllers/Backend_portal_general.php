@@ -11,6 +11,6 @@ class Backend_portal_general extends MY_Backend
 
     public function index()
     {
-        return view('backend/index');
+        return view('backend/header', $this->data) . view('backend/index', $this->data) . view('backend/footer', $this->data);
     }
 }
