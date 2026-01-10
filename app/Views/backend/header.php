@@ -64,6 +64,16 @@
         href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"
         integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0="
         crossorigin="anonymous" />
+
+
+    <!--font awesome-->
+    <script src="https://use.fontawesome.com/4f75abfd27.js"></script>
+
+    <!--Angular JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js" integrity="sha512-1qSuCpdoteBVxXOewHUBoVw+cvT1/kr+RuFK0HQsZFe6h7SEpm5VzXR1bBptPLyvQpxoaP/or5NUVRS4WwWgWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--Jquery-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -104,26 +114,26 @@
                                 src="<?= base_url('backend/assets/img/user2-160x160.jpg') ?>"
                                 class="user-image rounded-circle shadow"
                                 alt="User Image" />
-                            <span class="d-none d-md-inline">Alexander Pierce</span>
+                            <span class="d-none d-md-inline"><?= $my_user_data['name'] ?? '' ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <!--begin::User Image-->
-                            <li class="user-header text-bg-primary">
+                            <li class="user-header text-bg-secondary">
                                 <img
                                     src="<?= base_url('backend/assets/img/user2-160x160.jpg') ?>"
                                     class="rounded-circle shadow"
                                     alt="User Image" />
                                 <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2023</small>
+                                    <?= $my_user_data['name'] ?? '' ?> - <?= $user_level_kv_list[$my_user_data['level']] ?? '' ?>
+                                    <small>Member since <?= date('d M, Y', strtotime($my_user_data['created_date']))  ?></small>
                                 </p>
                             </li>
                             <!--end::User Image-->
-                            
+
                             <!--begin::Menu Footer-->
                             <li class="user-footer">
-                                <a href="<?= base_url(BACKEND_PORTAL.'/profile') ?>" class="btn btn-outline-secondary">Profile</a>
-                                <a href="<?= base_url(BACKEND_PORTAL.'/logout') ?>" class="btn btn-outline-danger float-end">Sign out</a>
+                                <a href="<?= base_url(BACKEND_PORTAL . '/profile') ?>" class="btn btn-outline-secondary">Profile</a>
+                                <a href="<?= base_url(BACKEND_PORTAL . '/logout') ?>" class="btn btn-outline-danger float-end">Sign out</a>
                             </li>
                             <!--end::Menu Footer-->
                         </ul>
@@ -164,11 +174,17 @@
                         role="navigation"
                         aria-label="Main navigation"
                         data-accordion="false"
-                        id="navigation">                        
+                        id="navigation">
                         <li class="nav-item">
-                            <a href="<?= base_url(BACKEND_PORTAL.'/dashboard') ?>" class="nav-link active">
+                            <a href="<?= base_url(BACKEND_PORTAL . '/dashboard') ?>" class="nav-link <?= $current_module == 'dashboard' ? 'active' : '' ?>">
                                 <i class="nav-icon bi bi-speedometer"></i>
                                 <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(BACKEND_PORTAL . '/profile') ?>" class="nav-link <?= $current_module == 'profile' ? 'active' : '' ?>">
+                                <i class="nav-icon bi bi-person"></i>
+                                <p>Profile</p>
                             </a>
                         </li>
                     </ul>

@@ -11,6 +11,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->group(BACKEND_PORTAL, ['filter' => 'backend_auth'], ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('/', 'Backend_portal_general::index');
     $routes->get('dashboard', 'Backend_portal_general::index');
+    $routes->get('profile', 'Backend_portal_general::profile');
 });
 
 //BACKEND PORTAL (Unlogged In)
