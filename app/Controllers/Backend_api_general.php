@@ -192,4 +192,76 @@ class Backend_api_general extends BaseResourceController
             ]);
         }
     }
+
+    public function reset_password()
+    {
+
+        try {
+
+            if (isset($_SERVER["CONTENT_TYPE"]) && strpos($_SERVER["CONTENT_TYPE"], "application/json") !== false) {
+                $_POST = array_merge($_POST, (array) json_decode(trim(file_get_contents('php://input')), true));
+
+                //verify recaptcha
+                $recaptcha = $this->request->getVar('recaptcha');
+                $secret_key = $this->data['site_config']['recaptcha_secret_key'];
+                $ip = $_SERVER['REMOTE_ADDR'];
+
+                $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $secret_key . "&response=" . $recaptcha . "&remoteip=" . $ip);
+                $responseKeys = json_decode($response, true);
+
+                if (!isset($responseKeys['success']) || $responseKeys['success'] != 1) {
+                    throw new Exception("Recaptcha verification failed.");
+                }
+
+                $new_password = $this->request->getVar('new_password');
+                $confirm_password = $this->request->getVar('confirm_password');
+                $verification_token = $this->request->getVar('verification_token');
+
+                if (empty($verification_token)) {
+                    throw new Exception("Verification token cannot be blank");
+                }
+
+                $user_data = $this->User_model->get_one([
+                    'is_deleted' => 0,
+                    'verification_token' => $verification_token,
+                ]);
+                if (empty($user_data)) {
+                    throw new Exception("Invalid verification code or verification code is expired");
+                }
+
+                //check password
+                if (empty($new_password)) {
+                    throw new Exception("New password cannot blank");
+                } else {
+                    if (strlen($new_password) < 5) {
+                        throw new Exception('Password length at least 5');
+                    }
+
+                    if ($confirm_password != $new_password) {
+                        throw new Exception('New password and confirm password not the same, please check');
+                    }
+                }
+
+                $this->User_model->update_data([
+                    'id' => $user_data['id']
+                ], [
+                    'modified_date' => date('Y-m-d H:i:s'),
+                    'password' => sha1($new_password),
+                    'verification_token' => null,
+                ]);
+
+                return $this->respond([
+                    'status' => "SUCCESS",
+                    'result' => []
+                ]);
+            } else {
+                throw new Exception('Invalid param');
+            }
+        } catch (Exception $e) {
+            return $this->fail([
+                'status' => "ERROR",
+                'result' => $e->getMessage()
+            ]);
+        }
+    }
 }
