@@ -113,4 +113,43 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
         //kv list
         $this->data['user_level_kv_list'] = $this->User_model->level_kv_list();
     }
+
+    public function member_authentication($user_id, $login_token)
+    {
+
+        //check login token
+        if (empty($login_token)) {
+            throw new Exception('Login token is missing');
+        } else {
+            $login_token_data = $this->Login_token_model->get_one([
+                'is_deleted' => 0,
+                'user_id' => $user_id,
+                'token' => $login_token,
+                'expiry_time >=' => date('Y-m-d H:i:s'),
+            ]);
+            if (empty($login_token_data)) {
+                throw new Exception('Invalid login token or login token is expired');
+            }
+        }
+
+        //get user data 
+        $user_data = $this->User_model->get_one([
+            'is_deleted' => 0,
+            'id' => $login_token_data['user_id'],
+            'level <=' => 1,
+        ]);
+        if (empty($user_data)) {
+            throw new Exception("User data not found");
+        } else {
+            if ($user_data['status'] != 1) {
+                throw new Exception('This user account is currently inactive');
+            }
+        }
+        return $user_data;
+    }
+
+    public function get_function_execution_origin()
+    {
+        return class_basename($this->Router_service->controllerName()) . "/" . $this->Router_service->methodName();
+    }
 }

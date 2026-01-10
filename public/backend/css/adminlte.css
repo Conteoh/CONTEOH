@@ -15580,4 +15580,43 @@ fieldset legend {
   }
 }
 
+/* AngularJS ng-invalid styling */
+form[was-validate] input.ng-invalid,
+form[was-validate] select.ng-invalid,
+form[was-validate] textarea.ng-invalid {
+  border-color: var(--bs-danger);
+  border-width: 1px;
+  border-style: solid;
+}
+
+form[was-validate] input.ng-invalid:focus,
+form[was-validate] select.ng-invalid:focus,
+form[was-validate] textarea.ng-invalid:focus {
+  border-color: var(--bs-danger);
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* Disabled and readonly input styling */
+input:disabled,
+input[readonly],
+select:disabled,
+select[readonly],
+textarea:disabled,
+textarea[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.form-select:disabled,
+.form-select[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
 /*# sourceMappingURL=adminlte.css.map */

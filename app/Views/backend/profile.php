@@ -16,7 +16,7 @@
     </div>
     <div class="app-content">
         <div class="container-fluid">
-            <form name="result_form">
+            <form name="result_form" was-validate>
                 <div class="row">
 
                     <!-- General Information -->
@@ -68,7 +68,7 @@
                                         <div class="form-group">
                                             <label for="old_password">Old Password</label>
                                             <div class="input-group mb-1">
-                                                <input type="{{ form_data.show_old_password ? 'text' : 'password' }}" class="form-control" id="old_password" name="old_password" placeholder="Old Password" ng-model="form_data.old_password" required />
+                                                <input type="{{ form_data.show_old_password ? 'text' : 'password' }}" class="form-control" id="old_password" name="old_password" placeholder="Old Password" ng-model="form_data.old_password" />
                                                 <button class="btn btn-primary" type="button" ng-click="form_data.show_old_password = !form_data.show_old_password">
                                                     <span class="bi bi-eye" ng-if="!form_data.show_old_password"></span>
                                                     <span class="bi bi-eye-slash" ng-if="form_data.show_old_password"></span>
@@ -81,7 +81,7 @@
                                         <div class="form-group">
                                             <label for="new_password">New Password</label>
                                             <div class="input-group">
-                                                <input type="{{ form_data.show_password ? 'text' : 'password' }}" class="form-control" id="new_password" name="new_password" placeholder="New Password" ng-model="form_data.new_password" required />
+                                                <input type="{{ form_data.show_password ? 'text' : 'password' }}" class="form-control" id="new_password" name="new_password" placeholder="New Password" ng-model="form_data.new_password" ng-required="form_data.old_password != ''" />
                                                 <button class="btn btn-primary" type="button" ng-click="form_data.show_password = !form_data.show_password">
                                                     <span class="bi bi-eye" ng-if="!form_data.show_password"></span>
                                                     <span class="bi bi-eye-slash" ng-if="form_data.show_password"></span>
@@ -93,7 +93,7 @@
                                         <div class="form-group">
                                             <label for="confirm_password">Confirm Password</label>
                                             <div class="input-group">
-                                                <input type="{{ form_data.show_confirm_password ? 'text' : 'password' }}" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" ng-model="form_data.confirm_password" required />
+                                                <input type="{{ form_data.show_confirm_password ? 'text' : 'password' }}" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" ng-model="form_data.confirm_password" ng-required="form_data.old_password != ''" />
                                                 <button class="btn btn-primary" type="button" ng-click="form_data.show_confirm_password = !form_data.show_confirm_password">
                                                     <span class="bi bi-eye" ng-if="!form_data.show_confirm_password"></span>
                                                     <span class="bi bi-eye-slash" ng-if="form_data.show_confirm_password"></span>
@@ -134,10 +134,43 @@
             'my_user_id': $scope.my_user_id,
             'my_login_token': $scope.my_login_token,
 
+            'is_submitting': 0,
+            'error_msg': '',
+            'success_msg': '',
+
+            //General Information
             'name': "<?= $my_user_data['name'] ?? '' ?>",
             'email': "<?= $my_user_data['email'] ?? '' ?>",
             'dial_code': "<?= $my_user_data['dial_code'] ?? '' ?>",
             'mobile': "<?= $my_user_data['mobile'] ?? '' ?>",
+
+            //Change Password
+            'old_password': '',
+            'new_password': '',
+            'confirm_password': '',
+            'show_old_password': false,
+            'show_password': false,
+            'show_confirm_password': false,
+
         };
+
+        $scope.submit_now = function() {
+            $scope.form_data.error_msg = "";
+            let to_be_submit = $scope.form_data;
+            $scope.form_data.is_submitting = 1;
+            $http.post("<?= base_url(BACKEND_API . '/general/update_profile') ?>", to_be_submit).then(function(response) {
+                if (response.data.status == "SUCCESS") {
+                    alert('Successfully updated');
+                    location.reload();
+                } else {
+                    $scope.form_data.error_msg = response.data.result;
+                }
+            }, function(response) {
+                $scope.form_data.error_msg = response.data.messages.result;
+            }).finally(function() {
+                $scope.form_data.is_submitting = 0;
+            });
+
+        }
     });
 </script>

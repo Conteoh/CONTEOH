@@ -264,4 +264,95 @@ class Backend_api_general extends BaseResourceController
             ]);
         }
     }
+
+    public function update_profile()
+    {
+        try {
+
+            if (isset($_SERVER["CONTENT_TYPE"]) && strpos($_SERVER["CONTENT_TYPE"], "application/json") !== false) {
+                $_POST = array_merge($_POST, (array) json_decode(trim(file_get_contents('php://input')), true));
+
+                //authentication
+                $my_user_id = $this->request->getVar('my_user_id');
+                $my_login_token = $this->request->getVar('my_login_token');
+                $my_data = $this->member_authentication($my_user_id, $my_login_token);
+
+                //get 
+                $result_data = $this->User_model->get_one([
+                    'is_deleted' => 0,
+                    'id' => $my_data['id']
+                ]);
+                if (empty($result_data)) {
+                    throw new Exception('Result data not found');
+                }
+
+                $name = trim($this->request->getVar('name'));
+                $dial_code = trim($this->request->getVar('dial_code'));
+                $mobile = trim($this->request->getVar('mobile'));
+                $old_password = trim($this->request->getVar('old_password'));
+                $new_password = trim($this->request->getVar('new_password'));
+                $confirm_password = trim($this->request->getVar('confirm_password'));
+
+                $submit_data = [
+                    'modified_date' => date('Y-m-d H:i:s'),
+                    'name' => !empty($name) ? $name : null,
+                    'dial_code' => !empty($dial_code) ? $dial_code : null,
+                    'mobile' => !empty($mobile) ? $mobile : null,
+                ];
+
+                if (!empty($old_password)) {
+                    if (sha1($old_password) != $result_data['password']) {
+                        throw new Exception("Invalid old password, please check");
+                    }
+
+                    if (empty($new_password)) {
+                        throw new Exception('New password cannot be blank');
+                    } else {
+                        if (strlen($new_password) < 5) {
+                            throw new Exception('New password length at least 5');
+                        }
+
+                        if ($confirm_password != $new_password) {
+                            throw new Exception('New password and confirm password not tally, please check');
+                        }
+                    }
+
+                    $submit_data['password'] = sha1($new_password);
+                }
+
+                $this->User_model->transStart();
+
+                $this->User_model->update_data([
+                    'id' => $result_data['id']
+                ], $submit_data);
+
+                $after_data = $this->User_model->get_one(['id' => $result_data['id']]);
+
+                $this->Audit_trail_model->insert_data([
+                    'created_date' => date('Y-m-d H:i:s'),
+                    'user_id' => $my_data['id'],
+                    'ref_table' => $this->current_module,
+                    'ref_id' => $result_data['id'],
+                    'action_type' => 1,
+                    'before' => json_encode($result_data),
+                    'after' => json_encode($after_data),
+                    "origin" => $this->get_function_execution_origin()
+                ]);
+
+                $this->User_model->transComplete();
+
+                return $this->respond([
+                    'status' => "SUCCESS",
+                    'result' => []
+                ]);
+            } else {
+                throw new Exception('Invalid param');
+            }
+        } catch (Exception $e) {
+            return $this->fail([
+                'status' => "ERROR",
+                'result' => $e->getMessage()
+            ]);
+        }
+    }
 }
