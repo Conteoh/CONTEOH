@@ -94,4 +94,23 @@ class MY_Backend extends BaseController
             view('backend/' . $this->data['current_module'] . '/list', $this->data) .
             view('backend/footer', $this->data);
     }
+
+    public function action($id = 0)
+    {
+        if ($id > 0) {
+            //get result data
+            $result_data = $this->Main_model->get_one([
+                'is_deleted' => 0,
+                'id' => $id
+            ]);
+            if (empty($result_data)) {
+                show_error('Result not found');
+            }
+            $this->data['result_data'] = $result_data;
+        }
+
+        $this->data['id'] = $id;
+
+        return view('backend/header', $this->data) . view('backend/' . $this->data['current_module'] . '/action', $this->data) . view('backend/footer', $this->data);
+    }
 }

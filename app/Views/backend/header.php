@@ -58,6 +58,10 @@
     <link rel="stylesheet" href="<?= base_url('backend/css/adminlte.css') ?>" />
     <!--end::Required Plugin(AdminLTE)-->
 
+    <!--begin::Custom CSS-->
+    <link rel="stylesheet" href="<?= base_url('backend/css/custom.css') ?>" />
+    <!--end::Custom CSS-->
+
     <!-- apexcharts -->
     <link
         rel="stylesheet"

@@ -99,3 +99,7 @@ define('BASEURL', $baseurl);
 define('BACKEND_PORTAL', 'backend_portal');
 define('BACKEND_API', 'backend_api');
 define('BACKEND_ITEM_PER_PAGE', 20);
+define('BACKEND_DELETE_ACTION_REMINDER', 'Are you sure you want to delete this record?');
+define('BACKEND_DELETE_SUCCESS_MSG', 'Successfully deleted!');
+define('BACKEND_SUBMIT_SUCCESS_MSG', 'Successfully submitted!');
+define('BACKEND_SUBMIT_ACTION_REMINDER', 'Are you sure you want to perform this action?');

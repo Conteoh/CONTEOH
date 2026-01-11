@@ -1,0 +1,17 @@
+.b-result-list-table td {
+    vertical-align: middle;
+}
+
+.b-result-list-table .list-act-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+}
+
+.b-result-list-table .list-act-btn i {
+    display: inline-block;
+    line-height: 1;
+}

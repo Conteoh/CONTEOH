@@ -213,4 +213,54 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
             ]);
         }
     }
+
+    public function delete($id = null)
+    {
+        try {
+
+            //user authentication
+            $my_user_id = $this->request->getVar('my_user_id');
+            $my_login_token = $this->request->getVar('my_login_token');
+            $my_data = $this->member_authentication($my_user_id, $my_login_token);
+
+            $result_data = $this->Main_model->get_one([
+                'is_deleted' => 0,
+                'id' => $id,
+            ]);
+            if (empty($result_data)) {
+                throw new Exception("Result data not found");
+            }
+
+            $this->Main_model->transStart();
+
+            $this->Main_model->update_data([
+                'id' => $result_data['id'],
+            ], [
+                'modified_date' => date("Y-m-d H:i:s"),
+                'is_deleted' => 1,
+            ]);
+
+            //Insert 'audit_trail'
+            $this->Audit_trail_model->insert_data([
+                'created_date' => date('Y-m-d H:i:s'),
+                'user_id' => $my_data['id'],
+                'ref_table' => $this->current_module,
+                'ref_id' => $id,
+                'action_type' => $this->Audit_trail_model::ACTION_DELETE,
+                "origin" => $this->get_function_execution_origin()
+            ]);
+
+            $this->Main_model->transComplete();
+
+            return $this->respond([
+                'status' => "SUCCESS",
+                'result' => []
+            ]);
+        } catch (Exception $e) {
+            return $this->fail([
+                'status' => "ERROR",
+                'result' => $e->getMessage()
+            ]);
+        }
+    }
 }
