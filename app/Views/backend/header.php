@@ -74,6 +74,9 @@
 
     <!--Jquery-->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!--CK Editor-->
+    <script type="text/javascript" src="<?= base_url("assets/ckeditor/ckeditor.js") ?>"></script>
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -185,6 +188,12 @@
                             <a href="<?= base_url(BACKEND_PORTAL . '/profile') ?>" class="nav-link <?= $current_module == 'profile' ? 'active' : '' ?>">
                                 <i class="nav-icon bi bi-person"></i>
                                 <p>Profile</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url(BACKEND_PORTAL . '/setting') ?>" class="nav-link <?= $current_module == 'setting' ? 'active' : '' ?>">
+                                <i class="nav-icon bi bi-gear"></i>
+                                <p>Setting</p>
                             </a>
                         </li>
                     </ul>

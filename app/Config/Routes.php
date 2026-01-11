@@ -12,6 +12,7 @@ $routes->group(BACKEND_PORTAL, ['filter' => 'backend_auth'], ['namespace' => 'Ap
     $routes->get('/', 'Backend_portal_general::index');
     $routes->get('dashboard', 'Backend_portal_general::index');
     $routes->get('profile', 'Backend_portal_general::profile');
+    $routes->get('setting', 'Backend_portal_general::setting');
 });
 
 //BACKEND PORTAL (Unlogged In)
@@ -24,10 +25,14 @@ $routes->group(BACKEND_PORTAL, ['namespace' => 'App\Controllers'], function ($ro
 
 //BACKEND API 
 $routes->group(BACKEND_API, function ($routes) {
+    //General
     $routes->post('general/login_submit', 'Backend_api_general::login_submit');
     $routes->post('general/sent_reset_password_link', 'Backend_api_general::sent_reset_password_link');
     $routes->post('general/reset_password', 'Backend_api_general::reset_password');
     $routes->post('general/update_profile', 'Backend_api_general::update_profile');
+
+    //Setting
+    $routes->post('setting/batch_update', 'Backend_api_setting::batch_update');
 });
 
 $routes->get('/', 'Home::index');

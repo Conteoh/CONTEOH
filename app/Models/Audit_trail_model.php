@@ -7,9 +7,6 @@ class Audit_trail_model extends MY_Model{
 	public const ACTION_ADD = 0;
 	public const ACTION_EDIT = 1;
 	public const ACTION_DELETE = 2;
-	public const PLATFORM_DEALER = 1;
-	public const PLATFORM_PARTNER = 2;
-	public const PLATFORM_TUNER = 3;
 
     public function __construct()
     {
@@ -18,7 +15,7 @@ class Audit_trail_model extends MY_Model{
 
     public function insert_data($submit_data = [])
 	{
-        if(isset($submit_data['action']) && $submit_data['action'] == self::ACTION_EDIT) {
+        if(isset($submit_data['action_type']) && $submit_data['action_type'] == self::ACTION_EDIT) {
 			$before_data = [];
 			if(isset($submit_data['before'])){
 				$before_data = json_decode($submit_data['before'],true);
