@@ -77,6 +77,15 @@
 
     <!--CK Editor-->
     <script type="text/javascript" src="<?= base_url("assets/ckeditor/ckeditor.js") ?>"></script>
+
+    <!--Ngtable-->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-resource.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-sanitize.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+    <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap.js" integrity="sha512-3z5zbCPEG7DvKKz46yvPmKL+w+UDfwY0f2YWFVIwBb+2Y4E23jTZHZxG+naAiTllvMNQAhapPDKGHBT7V3fQOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap-tpls.js" integrity="sha512-Re9KhAaoh5qo/Cm/wtExVs7ETTKTx/81aXPHko2nWlUvTzELYhTwpp/DwUu+z8ul+DjtbJdPcmxEYwKewzG62w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap-csp.css" integrity="sha512-TSigfdiJq7G9AWJnE/8D3M/HcBs9wfKpbrCbMg4iSs8IRVujA854B5wd/glfPzBRaeqiLLz1jHm6swYsci2txQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -195,6 +204,29 @@
                                 <i class="nav-icon bi bi-gear"></i>
                                 <p>Setting</p>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-gear-fill"></i>
+                                <p>
+                                    Mail Template
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/list') ?>" class="nav-link">
+                                        <i class="nav-icon bi bi-list"></i>
+                                        <p>List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/add') ?>" class="nav-link">
+                                        <i class="nav-icon bi bi-plus"></i>
+                                        <p>Add</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     <!--end::Sidebar Menu-->

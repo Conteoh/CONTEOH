@@ -6,9 +6,20 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
+$module_list = [
+    'mail_template',
+];
 
 //BACKEND PORTAL (Logged In)
-$routes->group(BACKEND_PORTAL, ['filter' => 'backend_auth'], ['namespace' => 'App\Controllers'], function ($routes) {
+$routes->group(BACKEND_PORTAL, ['filter' => 'backend_auth'], ['namespace' => 'App\Controllers'], function ($routes) use ($module_list) {
+    foreach ($module_list as $module) {
+        $routes->group($module, function ($routes) use ($module) {
+            $routes->get('list', 'Backend_portal_' . $module . '::list');
+            $routes->get('add', 'Backend_portal_' . $module . '::action/0');
+            $routes->get('edit/(:num)', 'Backend_portal_' . $module . '::action/$1');
+        });
+    }
+
     $routes->get('/', 'Backend_portal_general::index');
     $routes->get('dashboard', 'Backend_portal_general::index');
     $routes->get('profile', 'Backend_portal_general::profile');
@@ -24,7 +35,15 @@ $routes->group(BACKEND_PORTAL, ['namespace' => 'App\Controllers'], function ($ro
 });
 
 //BACKEND API 
-$routes->group(BACKEND_API, function ($routes) {
+$routes->group(BACKEND_API, function ($routes) use ($module_list) {
+    foreach ($module_list as $module) {
+        $routes->group($module, function ($routes) use ($module) {
+            $routes->get('list/(:num)/(:any)', 'Backend_api_' . $module . '::list/$1/$2');
+            $routes->post('submit', 'Backend_api_' . $module . '::submit');
+            $routes->delete('delete/(:num)', 'Backend_api_' . $module . '::delete/$1');
+        });
+    }
+
     //General
     $routes->post('general/login_submit', 'Backend_api_general::login_submit');
     $routes->post('general/sent_reset_password_link', 'Backend_api_general::sent_reset_password_link');

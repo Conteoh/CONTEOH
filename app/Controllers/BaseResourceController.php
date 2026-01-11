@@ -152,4 +152,65 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
     {
         return class_basename($this->Router_service->controllerName()) . "/" . $this->Router_service->methodName();
     }
+
+    public function list($my_user_id, $my_login_token)
+    {
+        try {
+            //Authentication
+            $my_data = $this->member_authentication($my_user_id, $my_login_token);
+            
+            $filter = $this->request->getVar('filter');
+            $count = $this->request->getVar('count');
+            $page = $this->request->getVar('page');
+
+            //filtering
+            if (!empty($filter)) {
+                $filter = array_map('urldecode', $filter);
+            }
+
+            $where = [
+                'is_deleted' => 0,
+            ];
+            $like = [];
+
+            //filtering
+            $response = $this->Main_model->get_table_fields();
+            if (isset($response['where']) && !empty($response['where'])) {
+                foreach ($response['where'] as $field) {
+                    if (isset($filter[$field]) && $filter[$field] != "") {
+                        $where[$field] = $filter[$field];
+                    }
+                }
+            }
+            if (isset($response['like']) && !empty($response['like'])) {
+                foreach ($response['like'] as $field) {
+                    if (isset($filter[$field]) && !empty($filter[$field])) {
+                        $like[$field] = $filter[$field];
+                    }
+                }
+            }
+
+            $start = ($page - 1) * $count;
+            $total_record = $this->Main_model->record_count($where, $like);
+            $result_list = $this->Main_model->fetch($count, $start, $where, $like);
+
+            foreach ($result_list as $k => $v) {
+                $created_date = date('Y-m-d h:i:sA', strtotime($v['created_date']));
+                $result_list[$k]['created_on'] = str_replace(" ", "<br>", $created_date);
+            }
+
+            return $this->respond([
+                'status' => "SUCCESS",
+                'result' => [
+                    'total_record' => $total_record,
+                    'result_list' => $result_list
+                ]
+            ]);
+        } catch (Exception $e) {
+            return $this->fail([
+                'status' => "ERROR",
+                'result' => $e->getMessage()
+            ]);
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 class MY_Backend extends BaseController
 {
     public $data = [];
+    public $Main_model;
     protected $Setting_model;
     protected $Login_token_model;
     protected $User_model;
@@ -12,6 +13,7 @@ class MY_Backend extends BaseController
     public function __construct()
     {
         //Load Model
+        $this->Main_model = model('Setting_model');
         $this->Setting_model = model('App\Models\Setting_model');
         $this->Login_token_model = model('App\Models\Login_token_model');
         $this->User_model = model('App\Models\User_model');
@@ -47,7 +49,6 @@ class MY_Backend extends BaseController
         //Load Kv List
         $this->data['user_level_kv_list'] = $this->User_model->level_kv_list();
         $this->data['user_level_kv_info'] = $this->User_model->kv_list_to_info($this->data['user_level_kv_list']);
-
     }
 
     protected function set_module($module)
@@ -85,5 +86,12 @@ class MY_Backend extends BaseController
                 }
             }
         }
+    }
+
+    public function list()
+    {
+        return view('backend/header', $this->data) .
+            view('backend/' . $this->data['current_module'] . '/list', $this->data) .
+            view('backend/footer', $this->data);
     }
 }
