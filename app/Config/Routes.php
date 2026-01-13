@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 
 $module_list = [
     'mail_template',
+    'user',
 ];
 
 //BACKEND PORTAL (Logged In)

@@ -47,7 +47,7 @@
                                                     <option value="+60">+60</option>
                                                     <option value="+65">+65</option>
                                                 </select>
-                                                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile" ng-model="form_data.mobile" minlength="9" maxlength="10" required style="width: 80%" />
+                                                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile" ng-model="form_data.mobile" minlength="8" maxlength="10" required style="width: 80%" />
                                             </div>
                                         </div>
                                     </div>

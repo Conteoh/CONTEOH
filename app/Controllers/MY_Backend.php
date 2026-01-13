@@ -49,6 +49,8 @@ class MY_Backend extends BaseController
         //Load Kv List
         $this->data['user_level_kv_list'] = $this->User_model->level_kv_list();
         $this->data['user_level_kv_info'] = $this->User_model->kv_list_to_info($this->data['user_level_kv_list']);
+        $this->data['yes_no_kv_list'] = $this->Setting_model->yes_no_kv_list();
+        $this->data['yes_no_kv_info'] = $this->Setting_model->kv_list_to_info($this->data['yes_no_kv_list']);
         $this->data['item_per_page_kv_list'] = $this->Setting_model->item_per_page_kv_list();
     }
 

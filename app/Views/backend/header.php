@@ -209,6 +209,29 @@
                                 <p>Setting</p>
                             </a>
                         </li>
+                        <li class="nav-item <?= $current_module == 'user' ? 'menu-open' : '' ?>">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon bi bi-people"></i>
+                                <p>
+                                    User
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= base_url(BACKEND_PORTAL . '/user/list') ?>" class="nav-link <?= $current_module == 'user' && $current_page == 'list' ? 'active' : '' ?>">
+                                        <i class="nav-icon bi bi-list"></i>
+                                        <p>List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= base_url(BACKEND_PORTAL . '/user/add') ?>" class="nav-link <?= $current_module == 'user' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
+                                        <i class="nav-icon bi bi-plus"></i>
+                                        <p>Add</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item <?= $current_module == 'mail_template' ? 'menu-open' : '' ?>">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-gear-fill"></i>
@@ -232,6 +255,7 @@
                                 </li>
                             </ul>
                         </li>
+
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>
