@@ -27,17 +27,17 @@
                     <div class="col-lg-12">
 
                         <div class="d-flex justify-content-end gap-2 mb-2">
-                            <button type="button" class="btn btn-secondary" ng-click="back_now()">
+                            <button type="button" class="btn btn-sm btn-secondary" ng-click="back_now()">
                                 <i class="fa fa-arrow-left"></i> Back
                             </button>
-                            <button type="button" class="btn btn-primary" ng-click="submit_now()" ng-disabled="result_form.$invalid || result_form.$pristine || form_data.is_submitting">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click="submit_now()" ng-disabled="result_form.$invalid || result_form.$pristine || form_data.is_submitting">
                                 <i class="fa fa-save"></i> Save Changes <i class="fa fa-spinner fa-spin" ng-show="form_data.is_submitting"></i>
                             </button>
                         </div>
 
                         <div class="card mb-4">
-                            <div class="card-header bg-secondary text-white">
-                                <h3 class="card-title"><i class="bi bi-info-circle"></i> <b>General Information</b></h3>
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa fa-info-circle"></i> <b>General Information</b></h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -77,7 +77,7 @@
                     </div>
 
                     <div>
-                        <button type="button" class="btn btn-primary" ng-click="submit_now()" ng-disabled="result_form.$invalid || result_form.$pristine || form_data.is_submitting">
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="submit_now()" ng-disabled="result_form.$invalid || result_form.$pristine || form_data.is_submitting">
                             <i class="fa fa-save"></i> Save Changes <i class="fa fa-spinner fa-spin" ng-show="form_data.is_submitting"></i>
                         </button>
                     </div>

@@ -209,7 +209,7 @@
                                 <p>Setting</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item <?= $current_module == 'mail_template' ? 'menu-open' : '' ?>">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-gear-fill"></i>
                                 <p>
@@ -219,13 +219,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/list') ?>" class="nav-link">
+                                    <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/list') ?>" class="nav-link <?= $current_module == 'mail_template' && $current_page == 'list' ? 'active' : '' ?>">
                                         <i class="nav-icon bi bi-list"></i>
                                         <p>List</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/add') ?>" class="nav-link">
+                                    <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/add') ?>" class="nav-link <?= $current_module == 'mail_template' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
                                         <i class="nav-icon bi bi-plus"></i>
                                         <p>Add</p>
                                     </a>

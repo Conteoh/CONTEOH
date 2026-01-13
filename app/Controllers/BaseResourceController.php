@@ -158,7 +158,7 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
         try {
             //Authentication
             $my_data = $this->member_authentication($my_user_id, $my_login_token);
-            
+
             $filter = $this->request->getVar('filter');
             $count = $this->request->getVar('count');
             $page = $this->request->getVar('page');
@@ -187,6 +187,19 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
                     if (isset($filter[$field]) && !empty($filter[$field])) {
                         $like[$field] = $filter[$field];
                     }
+                }
+            }
+
+            if (isset($filter['created_date_from']) && !empty($filter['created_date_from'])) {
+                $created_date_from = js_date_to_php_date($filter['created_date_from']);
+                if (!empty($created_date_from)) {
+                    $where['created_date >='] = $created_date_from;
+                }
+            }
+            if (isset($filter['created_date_to']) && !empty($filter['created_date_to'])) {
+                $created_date_to = js_date_to_php_date($filter['created_date_to']);
+                if (!empty($created_date_to)) {
+                    $where['created_date <='] = $created_date_to;
                 }
             }
 
