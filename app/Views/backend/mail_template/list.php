@@ -77,16 +77,17 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row justify-content-between align-items-center">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6 d-flex align-items-center">
                                     <h5 class="mb-0"><i class="fa fa-database"></i> Total Result : <span class="text-primary">{{config_data.total_record}}</span> Record</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-floating">
                                         <select class="form-select" id="item_per_page" ng-model="config_data.item_per_page" ng-change="load_result_list_now()">
-                                            <option value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
+                                            <?php if (isset($item_per_page_kv_list) && !empty($item_per_page_kv_list)): ?>
+                                                <?php foreach ($item_per_page_kv_list as $k => $v): ?>
+                                                    <option value="<?= $k ?>"><?= $v ?></option>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </select>
                                         <label for="item_per_page">Item Per Page</label>
                                     </div>

@@ -8,6 +8,16 @@ class Setting_model extends MY_Model{
     {
         parent::__construct();
     }
+    
+    public function item_per_page_kv_list()
+    {
+        return [
+            '10' => '10',
+            '20' => '20',
+            '50' => '50',
+            '100' => '100',
+        ];
+    }
 
     public function get_paging($item_per_page, $pagenum, $total_item, $page, $url)
     {
