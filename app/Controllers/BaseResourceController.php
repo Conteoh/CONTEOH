@@ -162,12 +162,17 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
             $filter = $this->request->getVar('filter');
             $count = $this->request->getVar('count');
             $page = $this->request->getVar('page');
+            $is_export = $this->request->getVar('is_export');
 
             //filtering
             if (!empty($filter)) {
                 $filter = array_map('urldecode', $filter);
             }
-
+            if ($is_export) {
+                //从网址取得filter
+                $filter = $this->request->getGet();                
+            }
+            
             $where = [
                 'is_deleted' => 0,
             ];
@@ -205,11 +210,21 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
 
             $start = ($page - 1) * $count;
             $total_record = $this->Main_model->record_count($where, $like);
+            if ($is_export) { //如果是Export，就捞全部资料
+                $count = $total_record;
+                $start = 0;
+            }
             $result_list = $this->Main_model->fetch($count, $start, $where, $like);
 
             foreach ($result_list as $k => $v) {
-                $created_date = date('Y-m-d h:i:sA', strtotime($v['created_date']));
-                $result_list[$k]['created_on'] = str_replace(" ", "<br>", $created_date);
+                if (!$is_export) {
+                    $created_date = date('Y-m-d h:i:sA', strtotime($v['created_date']));
+                    $result_list[$k]['created_on'] = str_replace(" ", "<br>", $created_date);
+                }
+            }
+
+            if ($is_export) {
+                $this->export_to_csv($result_list);
             }
 
             return $this->respond([
@@ -275,5 +290,86 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
                 'result' => $e->getMessage()
             ]);
         }
+    }
+
+    private function export_to_csv($result_list = [])
+    {
+        $header_list = [];
+        $body_list = [];
+
+        //Table的所有栏位
+        $table_field_list = $this->Main_model->get_table_fields(true);
+
+        //找出应该被排除的栏位
+        $exportation_exclused_fields = $this->Main_model->get_exportation_exclused_fields();
+
+        if (!empty($table_field_list)) {
+            foreach ($table_field_list as $k => $v) {
+                if (!in_array($k, $exportation_exclused_fields)) {
+                    $field_name = ucwords(str_replace("_", " ", $k));
+                    $header_list[$k] = $field_name;
+                }
+            }
+        }
+        
+        if (!empty($result_list)) {
+            $bind_select_list = $this->Main_model->bind_select_list;
+
+            foreach ($result_list as $k => $v) {
+                $body_data = [];
+                foreach ($header_list as $k2 => $v2) {
+                    $field_value = $v[$k2] ?? '';
+
+                    //查看是不是Yes No欄位
+                    if (in_array($k2, $this->Main_model->yes_no_fields)) {
+                        if ($v[$k2] == '1') {
+                            $field_value = 'Yes';
+                        } else {
+                            $field_value = 'No';
+                        }
+                    } else if (method_exists($this->Main_model, ($k2 . '_kv_list'))) {
+                        $field_kv_list = $this->Main_model->{$k2 . '_kv_list'}();
+                        if (isset($field_kv_list[$v[$k2]])) {
+                            $field_value = $field_kv_list[$v[$k2]];
+                        }
+                    } else if (isset($bind_select_list[$k2])) {
+                        $bind_select_arr = explode("|", $bind_select_list[$k2]);
+                        if (count($bind_select_arr) == 2) {
+                            $bind_module = $bind_select_arr[0];
+                            $bind_field = $bind_select_arr[1];
+
+                            //Load Model
+                            $Target_model = model('App\Models\\' . ucfirst($bind_module) . '_model');
+                            if ($Target_model) {
+                                $target_data = $Target_model->get_one([
+                                    'id' => $v[$k2],
+                                ]);
+                                if (!empty($target_data)) {
+                                    if (isset($target_data[$bind_field])) {
+                                        $field_value = $v[$k2] . '. ' . $target_data[$bind_field];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $body_data[$v2] = $field_value;
+                }
+                $body_list[] = $body_data;
+            }
+        }
+
+        //Export to CSV
+        $file_name = $this->current_module . "_" . date("YmdHis") . ".csv";
+        $output = fopen("php://output", 'w') or die("Can't open php://output");
+        header("Content-Type:application/csv");
+        header("Content-Disposition:attachment;filename=" . $file_name);
+        fputcsv($output, $header_list);
+        foreach ($body_list as $body) {
+            fputcsv($output, $body);
+        }
+        fclose($output) or die("Can't close php://output");
+
+        exit;
     }
 }

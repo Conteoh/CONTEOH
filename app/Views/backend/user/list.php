@@ -25,89 +25,92 @@
                             <h5 class="mb-0"><i class="fa fa-filter"></i> Filter Criteria</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row mb-2">
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="created_date_from">Created Date From</label>
-                                        <input type="date" class="form-control form-control-sm" id="created_date_from" name="created_date_from" placeholder="Created Date From" ng-model="filter_data.created_date_from">
+                            <form name="filter_form">
+                                <div class="row mb-2">
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="created_date_from">Created Date From</label>
+                                            <input type="date" class="form-control form-control-sm" id="created_date_from" name="created_date_from" placeholder="Created Date From" ng-model="filter_data.created_date_from">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="created_date_to">Created Date To</label>
+                                            <input type="date" class="form-control form-control-sm" id="created_date_to" name="created_date_to" placeholder="Created Date To" ng-model="filter_data.created_date_to">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="id">ID</label>
+                                            <input type="text" class="form-control form-control-sm" id="id" name="id" placeholder="ID" ng-model="filter_data.id">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="name">Name</label>
+                                            <input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Name" ng-model="filter_data.name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control form-control-sm" id="email" name="email" placeholder="Email" ng-model="filter_data.email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="level">Level</label>
+                                            <select class="form-control form-control-sm" id="level" name="level" ng-model="filter_data.level">
+                                                <option value="">All</option>
+                                                <?php if (isset($user_level_kv_list) && !empty($user_level_kv_list)): ?>
+                                                    <?php foreach ($user_level_kv_list as $k => $v): ?>
+                                                        <option value="<?= $k ?>"><?= $v ?></option>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="status">Status</label>
+                                            <select class="form-control form-control-sm" id="status" name="status" ng-model="filter_data.status">
+                                                <option value="">All</option>
+                                                <?php if (isset($status_kv_list) && !empty($status_kv_list)): ?>
+                                                    <?php foreach ($status_kv_list as $k => $v): ?>
+                                                        <option value="<?= $k ?>"><?= $v ?></option>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-group">
+                                            <label for="is_email_verified">Email Verified</label>
+                                            <select class="form-control form-control-sm" id="is_email_verified" name="is_email_verified" ng-model="filter_data.is_email_verified">
+                                                <option value="">All</option>
+                                                <?php if (isset($yes_no_kv_list) && !empty($yes_no_kv_list)): ?>
+                                                    <?php foreach ($yes_no_kv_list as $k => $v): ?>
+                                                        <option value="<?= $k ?>"><?= $v ?></option>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="created_date_to">Created Date To</label>
-                                        <input type="date" class="form-control form-control-sm" id="created_date_to" name="created_date_to" placeholder="Created Date To" ng-model="filter_data.created_date_to">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="id">ID</label>
-                                        <input type="text" class="form-control form-control-sm" id="id" name="id" placeholder="ID" ng-model="filter_data.id">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Name" ng-model="filter_data.name">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="text" class="form-control form-control-sm" id="email" name="email" placeholder="Email" ng-model="filter_data.email">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="level">Level</label>
-                                        <select class="form-control form-control-sm" id="level" name="level" ng-model="filter_data.level">
-                                            <option value="">All</option>
-                                            <?php if (isset($user_level_kv_list) && !empty($user_level_kv_list)): ?>
-                                                <?php foreach ($user_level_kv_list as $k => $v): ?>
-                                                    <option value="<?= $k ?>"><?= $v ?></option>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select class="form-control form-control-sm" id="status" name="status" ng-model="filter_data.status">
-                                            <option value="">All</option>
-                                            <?php if (isset($status_kv_list) && !empty($status_kv_list)): ?>
-                                                <?php foreach ($status_kv_list as $k => $v): ?>
-                                                    <option value="<?= $k ?>"><?= $v ?></option>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <div class="form-group">
-                                        <label for="is_email_verified">Email Verified</label>
-                                        <select class="form-control form-control-sm" id="is_email_verified" name="is_email_verified" ng-model="filter_data.is_email_verified">
-                                            <option value="">All</option>
-                                            <?php if (isset($yes_no_kv_list) && !empty($yes_no_kv_list)): ?>
-                                                <?php foreach ($yes_no_kv_list as $k => $v): ?>
-                                                    <option value="<?= $k ?>"><?= $v ?></option>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="button" class="btn btn-secondary btn-sm" ng-click="reset_filter()"><i class="fa fa-refresh"></i> Reset Filter</button>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-secondary btn-sm" ng-click="reset_filter()" ng-disabled="filter_form.$pristine"><i class="fa fa-refresh"></i> Reset Filter</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-12">
-                    <div class="d-flex justify-content-end mb-2">
+                    <div class="text-end mb-2">
+                        <button type="button" class="btn btn-secondary btn-sm" ng-click="export_now()"><i class="fa fa-download"></i> Export</button>
                         <a href="<?= base_url(BACKEND_PORTAL . '/' . $current_module . '/add') ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> Add New</a>
                     </div>
                     <div class="card">
@@ -263,6 +266,23 @@
         $scope.reset_filter = function() {
             $scope.filter_data = {};
             $scope.load_result_list_now();
+        }
+
+        $scope.export_now = () => {
+            let to_be_submit = angular.copy($scope.filter_data);
+            to_be_submit['is_export'] = 1;
+
+            let params = [];
+            angular.forEach(to_be_submit, function(value, key) {
+                params.push(key + '=' + encodeURIComponent(value));
+            });
+
+            let query_str = params.join('&');
+
+            let url = "<?= base_url(BACKEND_API . "/" . $current_module . "/list") ?>" + "/" + $scope.my_user_id + "/" + $scope.my_login_token + '?' + query_str;
+
+            window.open(url, '_blank');
+
         }
     });
 </script>

@@ -10,6 +10,9 @@ abstract class MY_Model extends Model
     protected $primaryKey;
     protected $allowedFields;
     public static $labelField;
+    protected $exportation_exclused_fields;
+    protected $yes_no_fields;
+    protected $bind_select_list;
 
     public function __construct()
     {
@@ -17,6 +20,10 @@ abstract class MY_Model extends Model
         $this->primaryKey = 'id';
 
         $this->define_allowed_fields();
+
+        $this->exportation_exclused_fields = [];
+        $this->yes_no_fields = [];
+        $this->bind_select_list = [];
     }
 
     private function define_allowed_fields()
@@ -415,5 +422,13 @@ abstract class MY_Model extends Model
             $builder =  $this->db->table($this->table);
             $builder->insertBatch($data_list);
         }
+    }
+
+    public function get_exportation_exclused_fields()
+    {
+        $excluded_field = array_merge($this->exportation_exclused_fields, [
+            'is_deleted'
+        ]);
+        return $excluded_field;
     }
 }

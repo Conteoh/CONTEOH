@@ -10,6 +10,9 @@ class User_model extends MY_Model
     public function __construct()
     {
         parent::__construct();
+
+        $this->yes_no_fields = ['is_email_verified'];
+        $this->exportation_exclused_fields = ['password', 'verification_token', 'last_sent_time', 'avatar'];
     }
 
     public function level_kv_list()
