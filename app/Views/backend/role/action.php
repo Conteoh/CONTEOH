@@ -41,22 +41,24 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label for="title">Title</label>
-                                    <input type="text" class="form-control" id="title" placeholder="Title" ng-model="form_data.title" required >
-                                </div>
-                            </div><div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" placeholder="Description" ng-model="form_data.description"  rows="5"  ></textarea>
-                                </div>
-                            </div><div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label for="priority">Priority</label>
-                                    <input type="number" step="1" class="form-control" id="priority" ng-model="form_data.priority" required >
-                                </div>
-                            </div>
+                                    <div class="col-md-10 mb-3">
+                                        <div class="form-group">
+                                            <label for="title">Title</label>
+                                            <input type="text" class="form-control" id="title" placeholder="Title" ng-model="form_data.title" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 mb-3">
+                                        <div class="form-group">
+                                            <label for="priority">Priority</label>
+                                            <input type="number" step="1" class="form-control" id="priority" ng-model="form_data.priority" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div class="form-group">
+                                            <label for="description">Description</label>
+                                            <textarea class="form-control" id="description" placeholder="Description" ng-model="form_data.description" rows="5"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,8 +89,8 @@
         $scope.my_login_token = '<?= $my_login_token ?? '' ?>';
 
         //Load Kv List
-        
-        
+
+
         $scope.id = <?= (isset($id) && !empty($id)) ? $id : 0 ?>;
 
         if ($scope.id && $scope.id > 0) {
@@ -96,9 +98,9 @@
             $scope.form_data.my_user_id = $scope.my_user_id;
             $scope.form_data.my_login_token = $scope.my_login_token;
 
-            if($scope.form_data.priority){
-                                $scope.form_data.priority = parseInt($scope.form_data.priority);
-                            }
+            if ($scope.form_data.priority) {
+                $scope.form_data.priority = parseInt($scope.form_data.priority);
+            }
 
 
         } else {
@@ -106,7 +108,7 @@
                 "my_user_id": $scope.my_user_id,
                 "my_login_token": $scope.my_login_token,
 
-                "priority" : 0,
+                "priority": 0,
 
             };
         }
@@ -131,7 +133,7 @@
                 return false;
             }
 
-            
+
 
 
             var to_be_submit = angular.copy($scope.form_data);
@@ -183,7 +185,7 @@
 
             var request = {
                 method: "POST",
-                url: "<?= base_url(BACKEND_API.'/general/upload_image_now') ?>",
+                url: "<?= base_url(BACKEND_API . '/general/upload_image_now') ?>",
                 data: formdata,
                 headers: {
                     "Content-Type": undefined
