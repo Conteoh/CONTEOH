@@ -9,6 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 $module_list = [
     'mail_template',
     'user',
+    'role',
 ];
 
 //BACKEND PORTAL (Logged In)
@@ -54,5 +55,8 @@ $routes->group(BACKEND_API, function ($routes) use ($module_list) {
     //Setting
     $routes->post('setting/batch_update', 'Backend_api_setting::batch_update');
 });
+
+//SYSTEM
+$routes->match(['cli', 'get'], 'gen/(:any)', 'Mvc_generator::$1');
 
 $routes->get('/', 'Home::index');
