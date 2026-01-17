@@ -68,6 +68,9 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
     protected $Audit_trail_model;
     protected $Setting_model;
     protected $Mail_template_model;
+    protected $System_module_model;
+    protected $User_permission_model;
+    
     //library
     protected $Emailer_library;
 
@@ -86,6 +89,9 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
         $this->Audit_trail_model = model("App\Models\Audit_trail_model");
         $this->Setting_model = model("App\Models\Setting_model");
         $this->Mail_template_model = model("App\Models\Mail_template_model");
+        $this->System_module_model = model("App\Models\System_module_model");
+        $this->User_permission_model = model("App\Models\User_permission_model");
+        
         //Other
         $this->item_per_page = 10;
 
@@ -172,6 +178,9 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
                 //从网址取得filter
                 $filter = $this->request->getGet();                
             }
+
+            //Permission check
+            $this->user_permission_verification($my_data['id'], $this->current_module, 'view');
             
             $where = [
                 'is_deleted' => 0,
@@ -258,6 +267,9 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
             if (empty($result_data)) {
                 throw new Exception("Result data not found");
             }
+
+            //Permission check
+            $this->user_permission_verification($my_data['id'], $this->current_module, 'delete');
 
             $this->Main_model->transStart();
 
@@ -371,5 +383,61 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
         fclose($output) or die("Can't close php://output");
 
         exit;
+    }
+
+    //$action : view/add/edit/delete
+    public function user_permission_verification($user_id, $module, $action)
+    {
+        if (isset($this->data['site_config']['backend_check_permission']) && $this->data['site_config']['backend_check_permission'] == "1") {
+            //Get data of user to be verify
+            $user_data = $this->User_model->get_one([
+                'id' => $user_id,
+            ]);
+            if (empty($user_data)) {
+                throw new Exception("User data not found");
+            } else {
+                //only check NON-Superadmin
+                if ($user_data['level'] >= 1) {
+                    $system_module_data = $this->System_module_model->get_one([
+                        'is_deleted' => 0,
+                        'title' => $module,
+                    ]);
+                    if (empty($system_module_data)) {
+                        throw new Exception('Module (' . $module . ') data not found');
+                    } else {
+
+                        $user_permission_data = $this->User_permission_model->get_one([
+                            'is_deleted' => 0,
+                            'system_module_id' => $system_module_data['id'],
+                            'user_id' => $user_id,
+                            'can_view' => 1,
+                        ]);
+
+                        if (empty($user_permission_data)) {
+                            throw new Exception('You are not authorized for current module : ' . $module);
+                        } else {
+                            //check user action
+                            switch ($action) {
+                                case "add":
+                                    if ($user_permission_data['can_add'] != 1) {
+                                        throw new Exception('You are not authorized to perform ADD in current module (' . $module . ')');
+                                    }
+                                    break;
+                                case "edit":
+                                    if ($user_permission_data['can_edit'] != 1) {
+                                        throw new Exception('You are not authorized to perform EDIT in current module (' . $module . ')');
+                                    }
+                                    break;
+                                case "delete":
+                                    if ($user_permission_data['can_delete'] != 1) {
+                                        throw new Exception('You are not authorized to perform DELETE in current module (' . $module . ')');
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

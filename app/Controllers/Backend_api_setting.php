@@ -36,6 +36,9 @@ class Backend_api_setting extends BaseResourceController
 
                 $result_list = isset($_POST['result_list']) ? $_POST['result_list'] : [];
 
+                //Permission check
+                $this->user_permission_verification($my_data['id'], $this->current_module, 'edit');
+
                 $this->Setting_model->transStart();
                 foreach ($result_list as $k => $v) {
                     $result_data = $this->Setting_model->get_one([

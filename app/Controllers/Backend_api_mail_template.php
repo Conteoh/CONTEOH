@@ -48,6 +48,10 @@ class Backend_api_mail_template extends BaseResourceController
                 $this->Main_model->transStart();
 
                 if (!empty($id) && $id != "0") {
+
+                    //Permission check
+                    $this->user_permission_verification($my_data['id'], $this->current_module, 'edit');
+
                     $ID = $id;
 
                     //check if record exist
@@ -78,8 +82,10 @@ class Backend_api_mail_template extends BaseResourceController
                         "origin" => $this->get_function_execution_origin()
                     ]);
                 } else {
-                    $submit_data['created_date'] = date("Y-m-d H:i:s");
+                    //Permission check
+                    $this->user_permission_verification($my_data['id'], $this->current_module, 'add');
 
+                    $submit_data['created_date'] = date("Y-m-d H:i:s");
                     $ID = $this->Main_model->insert_data($submit_data);
 
                     //Insert 'audit_trail'

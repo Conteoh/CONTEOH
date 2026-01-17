@@ -54,7 +54,7 @@
                                                 <option value="{{x.id}}" ng-repeat="x in user_level_kv_info">{{x.title}}</option>
                                             </select>
                                         </div>
-                                    </div>                                                                  
+                                    </div>
                                     <div class="col-md-4 mb-3">
                                         <div class="form-group">
                                             <label for="status">Status</label>
@@ -68,7 +68,7 @@
                                             <label for="email">Email</label>
                                             <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="form_data.email" required />
                                         </div>
-                                    </div>      
+                                    </div>
                                     <div class="col-md-4 mb-3">
                                         <div class="form-group">
                                             <label for="is_email_verified">Email Verified</label>
@@ -101,6 +101,90 @@
                         </div>
                     </div>
 
+                    <!-- Permission Configuration -->
+                    <div class="col-lg-12" ng-if="form_data.level != -1">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa fa-info-circle"></i> <b>Permission Configuration</b></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 mb-4">
+                                        <div class="form-group">
+                                            <label for="role">Role</label>
+                                            <select class="form-control" id="role_id" name="role_id" ng-model="form_data.role_id" ng-change="load_permission()" required>
+                                                <option value="0">None</option>
+                                                <option value="{{x.id}}" ng-repeat="x in role_kv_info">{{x.title}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered long-table text-center">
+                                                <tr>
+                                                    <th>
+                                                        <div>#</div>
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input" ng-change="select_column_all('all')" ng-model="config_data.all" ng-true-value="1" ng-false-value="0">
+                                                        </div>
+                                                    </th>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>
+                                                        Can View
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input" ng-change="select_column_all('view')" ng-model="config_data.view" ng-true-value="1" ng-false-value="0">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        Can Add
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input" ng-change="select_column_all('add')" ng-model="config_data.add" ng-true-value="1" ng-false-value="0">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        Can Edit
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input" ng-change="select_column_all('edit')" ng-model="config_data.edit" ng-true-value="1" ng-false-value="0">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        Can Delete
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input" ng-change="select_column_all('delete')" ng-model="config_data.delete" ng-true-value="1" ng-false-value="0">
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                                <tr ng-repeat="x in user_permission_list">
+                                                    <td>
+                                                        {{$index+1}}
+                                                        <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="x.select_all" ng-change="select_row_all($index)" style="position:relative;top:1px;margin-left:5px;" class="form-check-input">
+                                                    </td>
+                                                    <td>{{x.system_module_id}}</td>
+                                                    <td class="text-left">{{x.description}}</td>
+                                                    <td>
+                                                        <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_view">
+                                                    </td>
+                                                    <td>
+                                                        <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_add">
+                                                    </td>
+                                                    <td>
+                                                        <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_edit">
+                                                    </td>
+                                                    <td>
+                                                        <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_delete">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-lg-12" ng-if="form_data.error_msg">
                         <div class="alert alert-danger">
                             <i class="fa fa-exclamation-triangle"></i> {{form_data.error_msg}}
@@ -129,8 +213,19 @@
         $scope.status_kv_info = <?= isset($status_kv_info) ? json_encode($status_kv_info) : "[]" ?>;
         $scope.user_level_kv_info = <?= isset($user_level_kv_info) ? json_encode($user_level_kv_info) : "[]" ?>;
         $scope.yes_no_kv_info = <?= isset($yes_no_kv_info) ? json_encode($yes_no_kv_info) : "[]" ?>;
+        $scope.role_kv_info = <?= isset($role_kv_info) ? json_encode($role_kv_info) : "[]" ?>;
 
         $scope.id = <?= (isset($id) && !empty($id)) ? $id : 0 ?>;
+        $scope.user_permission_list = <?= isset($user_permission_list) ? json_encode($user_permission_list) : "[]" ?>;
+
+        $scope.config_data = {
+            'all': 0,
+            'view': 0,
+            'add': 0,
+            'edit': 0,
+            'delete': 0,
+        };
+
         if ($scope.id && $scope.id > 0) {
             $scope.form_data = <?= isset($result_data) ? json_encode($result_data) : "[]" ?>;
             $scope.form_data.my_user_id = $scope.my_user_id;
@@ -147,6 +242,7 @@
                 'is_email_verified': '0',
                 'dial_code': '+60',
                 'mobile': '',
+                'role_id': '0',
             };
         }
 
@@ -171,6 +267,7 @@
             }
 
             var to_be_submit = angular.copy($scope.form_data);
+            to_be_submit.user_permission_list = $scope.user_permission_list;
 
             // Only include password if it's provided (for edit) or required (for new)
             if ($scope.id > 0 && !to_be_submit.password) {
@@ -199,5 +296,93 @@
             });
         }
 
+        $scope.select_column_all = function(type) {
+            $scope.user_permission_list.forEach(function(v, k) {
+                switch (type) {
+                    case "view":
+                        $scope.user_permission_list[k]['can_view'] = $scope.config_data.view;
+                        break;
+                    case "add":
+                        $scope.user_permission_list[k]['can_add'] = $scope.config_data.add;
+                        break;
+                    case "edit":
+                        $scope.user_permission_list[k]['can_edit'] = $scope.config_data.edit;
+                        break;
+                    case "delete":
+                        $scope.user_permission_list[k]['can_delete'] = $scope.config_data.delete;
+                        break;
+                    case 'all':
+                        $scope.user_permission_list[k]['can_view'] = $scope.config_data.all;
+                        $scope.user_permission_list[k]['can_add'] = $scope.config_data.all;
+                        $scope.user_permission_list[k]['can_edit'] = $scope.config_data.all;
+                        $scope.user_permission_list[k]['can_delete'] = $scope.config_data.all;
+                        break;
+                }
+            });
+        }
+
+        $scope.select_row_all = function(index) {
+            if ($scope.user_permission_list[index]['select_all']) {
+                $scope.user_permission_list[index]['can_view'] = 1;
+                $scope.user_permission_list[index]['can_add'] = 1;
+                $scope.user_permission_list[index]['can_edit'] = 1;
+                $scope.user_permission_list[index]['can_delete'] = 1;
+            } else {
+                $scope.user_permission_list[index]['can_view'] = 0;
+                $scope.user_permission_list[index]['can_add'] = 0;
+                $scope.user_permission_list[index]['can_edit'] = 0;
+                $scope.user_permission_list[index]['can_delete'] = 0;
+            }
+        }
+
+        $scope.load_permission = function() {
+
+            $scope.config_data.all = 0;
+            $scope.config_data.view = 0;
+            $scope.config_data.add = 0;
+            $scope.config_data.edit = 0;
+            $scope.config_data.delete = 0;
+            $scope.select_column_all('all');
+
+            if ($scope.form_data.role_id && $scope.form_data.role_id != '0') {
+
+                var to_be_submit = {
+                    "my_user_id": $scope.my_user_id,
+                    "my_login_token": $scope.my_login_token,
+                    "role_id": $scope.form_data.role_id
+                }
+
+                $http.post("<?= base_url(BACKEND_API . '/role/load_role_permission') ?>", to_be_submit).then(function(response) {
+
+                    if (response.data.status == "SUCCESS") {
+
+                        if (response.data.result.permission_list) {
+                            $scope.copy_from_role_permission(response.data.result.permission_list);
+                        }
+
+                    } else {
+                        console.log(response.data.result);
+                    }
+
+                }, function(response) {
+                    console.log(response.data.messages.result);
+                });
+            } else {
+                $scope.reset_user_permission();
+            }
+        }
+
+        $scope.copy_from_role_permission = function(role_permission_list) {
+            $scope.user_permission_list.forEach(function(v, k) {
+                role_permission_list.forEach(function(v2, k2) {
+                    if (v.system_module_id == v2.system_module_id) {
+                        $scope.user_permission_list[k]['can_view'] = parseInt(v2.can_view);
+                        $scope.user_permission_list[k]['can_add'] = parseInt(v2.can_add);
+                        $scope.user_permission_list[k]['can_edit'] = parseInt(v2.can_edit);
+                        $scope.user_permission_list[k]['can_delete'] = parseInt(v2.can_delete);
+                    }
+                });
+            });
+        }
     });
 </script>

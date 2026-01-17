@@ -1,24 +1,26 @@
 <?php
 if (!function_exists('show_error')) {
-    function show_error($message = '', $heading = 'Error')
+    function show_error($message = '', $title = 'Error', $redirect_url = '')
     {
         // $response = service('response');
         // $response->setStatusCode($statusCode);
 
         echo view('errors/html/error_general', [
-            'title'   => $heading,
-            'message' => $message
+            'title'   => $title,
+            'message' => $message,
+            'redirect_url' => $redirect_url
         ]);
         exit;
     }
 }
 
 if (!function_exists('show_success')) {
-    function show_success($message = '', $heading = 'Success')
+    function show_success($message = '', $title = 'Success', $redirect_url = '')
     {
         echo view('errors/html/success_general', [
-            'title'   => $heading,
-            'message' => $message
+            'title'   => $title,
+            'message' => $message,
+            'redirect_url' => $redirect_url
         ]);
         exit;
     }

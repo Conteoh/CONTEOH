@@ -64,6 +64,74 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa fa-info-circle"></i> <b>Permission Configuration</b></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered long-table text-center">
+                                        <tr>
+                                            <th>
+                                                <div>#</div>
+                                                <div>
+                                                    <input type="checkbox" class="form-check-input" ng-change="select_column_all('all')" ng-model="config_data.all" ng-true-value="1" ng-false-value="0">
+                                                </div>
+                                            </th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>
+                                                Can View
+                                                <div>
+                                                    <input type="checkbox" class="form-check-input" ng-change="select_column_all('view')" ng-model="config_data.view" ng-true-value="1" ng-false-value="0">
+                                                </div>
+                                            </th>
+                                            <th>
+                                                Can Add
+                                                <div>
+                                                    <input type="checkbox" class="form-check-input" ng-change="select_column_all('add')" ng-model="config_data.add" ng-true-value="1" ng-false-value="0">
+                                                </div>
+                                            </th>
+                                            <th>
+                                                Can Edit
+                                                <div>
+                                                    <input type="checkbox" class="form-check-input" ng-change="select_column_all('edit')" ng-model="config_data.edit" ng-true-value="1" ng-false-value="0">
+                                                </div>
+                                            </th>
+                                            <th>
+                                                Can Delete
+                                                <div>
+                                                    <input type="checkbox" class="form-check-input" ng-change="select_column_all('delete')" ng-model="config_data.delete" ng-true-value="1" ng-false-value="0">
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr ng-repeat="x in permission_list">
+                                            <td>
+                                                {{$index+1}}
+                                                <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="x.select_all" ng-change="select_row_all($index)" style="position:relative;top:1px;margin-left:5px;" class="form-check-input">
+                                            </td>
+                                            <td>{{x.system_module_id}}</td>
+                                            <td class="text-left">{{x.description}}</td>
+                                            <td>
+                                                <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_view">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_add">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_edit">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="form-check-input" ng-true-value="1" ng-false-value="0" ng-model="x.can_delete">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-lg-12" ng-if="form_data.error_msg">
                         <div class="alert alert-danger">
                             <i class="fa fa-exclamation-triangle"></i> {{form_data.error_msg}}
@@ -92,6 +160,15 @@
 
 
         $scope.id = <?= (isset($id) && !empty($id)) ? $id : 0 ?>;
+        $scope.permission_list = <?= isset($permission_list) ? json_encode($permission_list) : "[]" ?>;
+
+        $scope.config_data = {
+            'all': 0,
+            'view': 0,
+            'add': 0,
+            'edit': 0,
+            'delete': 0,
+        };
 
         if ($scope.id && $scope.id > 0) {
             $scope.form_data = <?= isset($result_data) ? json_encode($result_data) : "[]" ?>;
@@ -133,11 +210,9 @@
                 return false;
             }
 
-
-
-
             var to_be_submit = angular.copy($scope.form_data);
-
+            to_be_submit.permission_list = $scope.permission_list;
+            
             $scope.form_data.is_submitting = 1;
 
             $http.post("<?= base_url(BACKEND_API . '/' . $current_module . '/submit') ?>", to_be_submit).then(function(response) {
@@ -158,6 +233,45 @@
                 alert(response.data.messages.result);
                 $scope.form_data.error_msg = response.data.messages.result;
             });
+        }
+
+        $scope.select_column_all = function(type) {
+            $scope.permission_list.forEach(function(v, k) {
+                switch (type) {
+                    case "view":
+                        $scope.permission_list[k]['can_view'] = $scope.config_data.view;
+                        break;
+                    case "add":
+                        $scope.permission_list[k]['can_add'] = $scope.config_data.add;
+                        break;
+                    case "edit":
+                        $scope.permission_list[k]['can_edit'] = $scope.config_data.edit;
+                        break;
+                    case "delete":
+                        $scope.permission_list[k]['can_delete'] = $scope.config_data.delete;
+                        break;
+                    case 'all':
+                        $scope.permission_list[k]['can_view'] = $scope.config_data.all;
+                        $scope.permission_list[k]['can_add'] = $scope.config_data.all;
+                        $scope.permission_list[k]['can_edit'] = $scope.config_data.all;
+                        $scope.permission_list[k]['can_delete'] = $scope.config_data.all;
+                        break;
+                }
+            });
+        }
+
+        $scope.select_row_all = function(index) {
+            if ($scope.permission_list[index]['select_all']) {
+                $scope.permission_list[index]['can_view'] = 1;
+                $scope.permission_list[index]['can_add'] = 1;
+                $scope.permission_list[index]['can_edit'] = 1;
+                $scope.permission_list[index]['can_delete'] = 1;
+            } else {
+                $scope.permission_list[index]['can_view'] = 0;
+                $scope.permission_list[index]['can_add'] = 0;
+                $scope.permission_list[index]['can_edit'] = 0;
+                $scope.permission_list[index]['can_delete'] = 0;
+            }
         }
 
         //image upload 

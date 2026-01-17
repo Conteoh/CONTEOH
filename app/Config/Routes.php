@@ -54,6 +54,9 @@ $routes->group(BACKEND_API, function ($routes) use ($module_list) {
 
     //Setting
     $routes->post('setting/batch_update', 'Backend_api_setting::batch_update');
+
+    //Role
+    $routes->post('role/load_role_permission', 'Backend_api_role::load_role_permission');
 });
 
 //SYSTEM
