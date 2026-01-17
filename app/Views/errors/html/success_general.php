@@ -77,25 +77,31 @@
         }
         .redirect-link {
             margin-top: 2rem;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 2rem;
             background: #51cf66;
-            color: #fff;
+            color: #ffffff !important;
             text-decoration: none;
-            border-radius: 0.25rem;
+            border-radius: 0.5rem;
             display: inline-block;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid #51cf66;
+            box-shadow: 0 4px 8px rgba(81, 207, 102, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
         }
         .redirect-link:hover {
             background: #40c057;
+            border-color: #40c057;
+            box-shadow: 0 6px 12px rgba(81, 207, 102, 0.6);
+            transform: translateY(-2px);
+        }
+        .redirect-link:active {
+            transform: translateY(0);
         }
         .redirect-info {
             margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #bbb;
-        }
-        #countdown {
-            color: #51cf66;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -110,23 +116,8 @@
 
         <?php if (!empty($redirect_url)) : ?>
             <div class="redirect-info">
-                <p>页面将在 <span id="countdown">3</span> 秒后自动跳转...</p>
-                <a href="<?= esc($redirect_url, 'attr') ?>" class="redirect-link">立即跳转</a>
+                <a href="<?= esc($redirect_url, 'attr') ?>" class="redirect-link">Go Back</a>
             </div>
-            <script>
-                let countdown = 3;
-                const countdownElement = document.getElementById('countdown');
-                const timer = setInterval(function() {
-                    countdown--;
-                    if (countdownElement) {
-                        countdownElement.textContent = countdown;
-                    }
-                    if (countdown <= 0) {
-                        clearInterval(timer);
-                        window.location.href = '<?= esc($redirect_url, 'js') ?>';
-                    }
-                }, 1000);
-            </script>
         <?php endif; ?>
     </div>
 </body>

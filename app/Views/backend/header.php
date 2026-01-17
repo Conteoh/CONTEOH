@@ -203,35 +203,47 @@
                                 <p>Profile</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url(BACKEND_PORTAL . '/setting') ?>" class="nav-link <?= $current_module == 'setting' ? 'active' : '' ?>">
-                                <i class="nav-icon bi bi-gear"></i>
-                                <p>Setting</p>
-                            </a>
-                        </li>
-                        <li class="nav-item <?= $current_module == 'user' ? 'menu-open' : '' ?>">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-people"></i>
-                                <p>
-                                    User
-                                    <i class="nav-arrow bi bi-chevron-right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="<?= base_url(BACKEND_PORTAL . '/user/list') ?>" class="nav-link <?= $current_module == 'user' && $current_page == 'list' ? 'active' : '' ?>">
-                                        <i class="nav-icon bi bi-list"></i>
-                                        <p>List</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= base_url(BACKEND_PORTAL . '/user/add') ?>" class="nav-link <?= $current_module == 'user' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
-                                        <i class="nav-icon bi bi-plus"></i>
-                                        <p>Add</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+
+                        <!--Setting-->
+                        <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['setting']) && $my_permission_list['setting']['can_view'])): ?>
+                            <li class="nav-item">
+                                <a href="<?= base_url(BACKEND_PORTAL . '/setting') ?>" class="nav-link <?= $current_module == 'setting' ? 'active' : '' ?>">
+                                    <i class="nav-icon bi bi-gear"></i>
+                                    <p>Setting</p>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['setting']) && $my_permission_list['setting']['can_view'])): ?>
+                            <li class="nav-item <?= $current_module == 'user' ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-people"></i>
+                                    <p>
+                                        User
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url(BACKEND_PORTAL . '/user/list') ?>" class="nav-link <?= $current_module == 'user' && $current_page == 'list' ? 'active' : '' ?>">
+                                            <i class="nav-icon bi bi-list"></i>
+                                            <p>List</p>
+                                        </a>
+                                    </li>
+                                    <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['user']) && $my_permission_list['user']['can_add'])): ?>
+                                        <li class="nav-item">
+                                            <a href="<?= base_url(BACKEND_PORTAL . '/user/add') ?>" class="nav-link <?= $current_module == 'user' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
+                                                <i class="nav-icon bi bi-plus"></i>
+                                                <p>Add</p>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+
+                        <!--Mail Template-->
+                        <?php if(!$site_config['backend_check_permission'] || (isset($my_permission_list['mail_template']) && $my_permission_list['mail_template']['can_view'])): ?>
                         <li class="nav-item <?= $current_module == 'mail_template' ? 'menu-open' : '' ?>">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-gear-fill"></i>
@@ -247,15 +259,20 @@
                                         <p>List</p>
                                     </a>
                                 </li>
+                                <?php if(!$site_config['backend_check_permission'] || (isset($my_permission_list['mail_template']) && $my_permission_list['mail_template']['can_add'])): ?>
                                 <li class="nav-item">
                                     <a href="<?= base_url(BACKEND_PORTAL . '/mail_template/add') ?>" class="nav-link <?= $current_module == 'mail_template' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
                                         <i class="nav-icon bi bi-plus"></i>
                                         <p>Add</p>
                                     </a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                         </li>
+                        <?php endif; ?>
+
                         <!--Role-->
+                        <?php if(!$site_config['backend_check_permission'] || (isset($my_permission_list['role']) && $my_permission_list['role']['can_view'])): ?>
                         <li class="nav-item <?= $current_module == 'role' ? 'menu-open' : '' ?>">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-person-gear"></i>
@@ -271,14 +288,17 @@
                                         <p>List</p>
                                     </a>
                                 </li>
+                                <?php if(!$site_config['backend_check_permission'] || (isset($my_permission_list['role']) && $my_permission_list['role']['can_add'])): ?>
                                 <li class="nav-item">
                                     <a href="<?= base_url(BACKEND_PORTAL . '/role/add') ?>" class="nav-link <?= $current_module == 'role' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
                                         <i class="nav-icon bi bi-plus"></i>
                                         <p>Add</p>
                                     </a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                         </li>
+                        <?php endif; ?>
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>

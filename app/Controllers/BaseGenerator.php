@@ -1315,7 +1315,7 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
         $module_display_name = ucwords(str_replace('_', ' ', $module_name));
         
         $content = '<!--' . $module_display_name . '-->
-<?php if ($this->data[\'site_config\'][\'backend_check_permission\']!=\'1\' || $this->data[\'my_user_data\'][\'level\'] == \'-1\' || (isset($my_permission_list[\'' . $module_name . '\']) && $my_permission_list[\'' . $module_name . '\'][\'can_view\'] == \'1\')) { ?>
+<?php if(!$site_config[\'backend_check_permission\'] || (isset($my_permission_list[\'' . $module_name . '\']) && $my_permission_list[\'' . $module_name . '\'][\'can_view\'])): ?>
 <li class="nav-item <?= $current_module == \'' . $module_name . '\' ? \'menu-open\' : \'\' ?>">
     <a href="#" class="nav-link">
         <i class="nav-icon bi bi-people"></i>
@@ -1331,17 +1331,17 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
                 <p>List</p>
             </a>
         </li>
-        <?php if ($this->data[\'site_config\'][\'backend_check_permission\']!=\'1\' || $this->data[\'my_user_data\'][\'level\'] == \'-1\' || (isset($my_permission_list[\'' . $module_name . '\']) && $my_permission_list[\'' . $module_name . '\'][\'can_add\'] == \'1\')) { ?>
+        <?php if(!$site_config[\'backend_check_permission\'] || (isset($my_permission_list[\'' . $module_name . '\']) && $my_permission_list[\'' . $module_name . '\'][\'can_add\'])): ?>
         <li class="nav-item">
             <a href="<?= base_url(BACKEND_PORTAL . \'/' . $module_name . '/add\') ?>" class="nav-link <?= $current_module == \'' . $module_name . '\' && ($current_page == \'add\' || $current_page == \'edit\') ? \'active\' : \'\' ?>">
                 <i class="nav-icon bi bi-plus"></i>
                 <p>Add</p>
             </a>
         </li>
-        <?php } ?>
+        <?php endif; ?>
     </ul>
 </li>
-<?php } ?>' . "\n";
+<?php endif; ?>' . "\n";
 
         echo $content;
     }

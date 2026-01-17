@@ -136,6 +136,7 @@ class MY_Backend extends BaseController
         //Get all module
         $system_module_list = $this->System_module_model->get_all([
             'is_deleted' => 0,
+            'is_display' => 1,
         ]);
         foreach ($system_module_list as $k => $v) {
 
