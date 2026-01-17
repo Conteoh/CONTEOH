@@ -9,9 +9,14 @@ use Psr\Log\LoggerInterface;
 
 class BaseGenerator extends Controller
 {
+    protected $System_module_model;
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
+
+        //Load Model    
+        $this->System_module_model = model('App\Models\System_module_model');
     }
 
     protected function module_generation($module_name, $field_list)
@@ -22,7 +27,18 @@ class BaseGenerator extends Controller
         $this->create_api($module_name, $field_list);
         $this->create_page_list($module_name, $field_list);
         $this->create_page_action($module_name, $field_list);
+        $this->add_system_module($module_name);
         $this->generate_navigation_text($module_name);
+    }
+
+    private function add_system_module($module_name)
+    {
+        $this->System_module_model->insert_data([
+            'created_date' => date('Y-m-d H:i:s'),
+            'title' => $module_name,
+            'description' => ucfirst(str_replace('_', ' ', $module_name)),
+            'is_display' => 1,
+        ]);
     }
 
     private function create_table($module_name, $field_list)
@@ -335,7 +351,7 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
 
                 if (!empty($id) && $id != "0") {
                     //Permission check
-                    $this->member_permission_verification($my_data[\'id\'], $this->current_module ,\'edit\');
+                    $this->user_permission_verification($my_data[\'id\'], $this->current_module ,\'edit\');
 
                     $ID = $id;
 
@@ -368,7 +384,7 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
                     ]);
                 } else {
                     //Permission check
-                    $this->member_permission_verification($my_data[\'id\'], $this->current_module ,\'add\');
+                    $this->user_permission_verification($my_data[\'id\'], $this->current_module ,\'add\');
 
                     $submit_data["created_date"] = date("Y-m-d H:i:s");
 

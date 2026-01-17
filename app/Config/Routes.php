@@ -10,6 +10,7 @@ $module_list = [
     'mail_template',
     'user',
     'role',
+    'enquiry',
 ];
 
 //BACKEND PORTAL (Logged In)
