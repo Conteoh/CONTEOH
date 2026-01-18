@@ -355,4 +355,92 @@ class Backend_api_general extends BaseResourceController
             ]);
         }
     }
+
+    public function upload_image_now()
+    {
+        try {
+
+            //Authentication
+            $my_user_id = $this->request->getVar('my_user_id');
+            $my_login_token = $this->request->getVar('my_login_token');
+            $my_data = $this->member_authentication($my_user_id, $my_login_token);
+
+            $width = $this->request->getVar('width');
+            $height = $this->request->getVar('height');
+            $crop = $this->request->getVar('crop');
+            $ori_file_ext = $this->request->getVar('ori_file_ext');
+            $quality = "auto";
+
+            $field_name = $this->request->getVar('field_name');
+            if (empty($field_name)) {
+                $field_name = 'image_path';
+            }
+            if (empty($width)) {
+                $width = 500;
+            }
+            if (empty($height)) {
+                $height = 500;
+            }
+            if (empty($crop)) {
+                $crop = 'fill';
+            }
+
+            if (isset($_FILES[$field_name])) {
+
+                if ($width == 'ori' && $height == 'ori') {
+                    list($width, $height) = getimagesize($_FILES[$field_name]['tmp_name']);
+                }
+
+                if ($_FILES[$field_name]['error'] == 0 && $_FILES[$field_name]['name'] != '') {
+
+                    $pathinfo = pathinfo($_FILES[$field_name]['name']);
+                    $ext = $pathinfo['extension'];
+                    $ext = strtolower($ext);
+
+                    switch ($ext) {
+                        case "jpeg":
+                        case "jpg":
+                        case "png":
+                        case "gif":
+
+                            if ($ori_file_ext) {
+                                $format = $ext;
+                            } else {
+                                $format = 'jpg';
+                            }
+
+                            $remote_img_path = $this->Cloudinary_library->upload($_FILES[$field_name]['tmp_name'], array(
+                                'width' => $width,
+                                'height' => $height,
+                                "crop" => $crop,
+                                "quality" => $quality,
+                                'format' => $format,
+                            ), $my_data['id']);
+
+                            break;
+                        case "pdf":
+                            $remote_img_path = $this->Cloudinary_library->upload($_FILES[$field_name]['tmp_name'], [], $my_data['id']);
+                            break;
+                        default:
+                            throw new Exception('Invalid file format');
+                            break;
+                    }
+                } else {
+                    throw new Exception("file error");
+                }
+            } else {
+                throw new Exception("no file has been uploaded");
+            }
+
+            return $this->respond([
+                'status' => "SUCCESS",
+                'result' => $remote_img_path
+            ]);
+        } catch (Exception $e) {
+            return $this->fail([
+                'status' => "ERROR",
+                'result' => $e->getMessage()
+            ]);
+        }
+    }
 }

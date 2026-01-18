@@ -328,6 +328,35 @@
                                 </ul>
                             </li>
                         <?php endif; ?>
+
+                        <!--Page-->
+                        <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['page']) && $my_permission_list['page']['can_view'])): ?>
+                            <li class="nav-item <?= $current_module == 'page' ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-file-text"></i>
+                                    <p>
+                                        Page
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url(BACKEND_PORTAL . '/page/list') ?>" class="nav-link <?= $current_module == 'page' && $current_page == 'list' ? 'active' : '' ?>">
+                                            <i class="nav-icon bi bi-list"></i>
+                                            <p>List</p>
+                                        </a>
+                                    </li>
+                                    <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['page']) && $my_permission_list['page']['can_add'])): ?>
+                                        <li class="nav-item">
+                                            <a href="<?= base_url(BACKEND_PORTAL . '/page/add') ?>" class="nav-link <?= $current_module == 'page' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
+                                                <i class="nav-icon bi bi-plus"></i>
+                                                <p>Add</p>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>

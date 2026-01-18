@@ -33,12 +33,19 @@ class BaseGenerator extends Controller
 
     private function add_system_module($module_name)
     {
-        $this->System_module_model->insert_data([
-            'created_date' => date('Y-m-d H:i:s'),
+        //Check if module already exists, if no then add it
+        $system_module_data = $this->System_module_model->get_one([
+            'is_deleted' => 0,
             'title' => $module_name,
-            'description' => ucfirst(str_replace('_', ' ', $module_name)),
-            'is_display' => 1,
         ]);
+        if (empty($system_module_data)) {
+            $this->System_module_model->insert_data([
+                'created_date' => date('Y-m-d H:i:s'),
+                'title' => $module_name,
+                'description' => ucfirst(str_replace('_', ' ', $module_name)),
+                'is_display' => 1,
+            ]);
+        }
     }
 
     private function create_table($module_name, $field_list)
@@ -1329,7 +1336,7 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
         echo "CREATE NAVIGATION SUCCESS <br/>\n\n";
 
         $module_display_name = ucwords(str_replace('_', ' ', $module_name));
-        
+
         $content = '<!--' . $module_display_name . '-->
 <?php if(!$site_config[\'backend_check_permission\'] || (isset($my_permission_list[\'' . $module_name . '\']) && $my_permission_list[\'' . $module_name . '\'][\'can_view\'])): ?>
 <li class="nav-item <?= $current_module == \'' . $module_name . '\' ? \'menu-open\' : \'\' ?>">

@@ -73,6 +73,7 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
     
     //library
     protected $Emailer_library;
+    protected $Cloudinary_library;
 
     //service
     protected $Router_service;
@@ -91,6 +92,7 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
         $this->Mail_template_model = model("App\Models\Mail_template_model");
         $this->System_module_model = model("App\Models\System_module_model");
         $this->User_permission_model = model("App\Models\User_permission_model");
+        $this->Cloudinary_library = model("App\Libraries\Cloudinary_client");
         
         //Other
         $this->item_per_page = 10;

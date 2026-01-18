@@ -11,6 +11,7 @@ $module_list = [
     'user',
     'role',
     'enquiry',
+    'page',
 ];
 
 //BACKEND PORTAL (Logged In)
@@ -52,6 +53,7 @@ $routes->group(BACKEND_API, function ($routes) use ($module_list) {
     $routes->post('general/sent_reset_password_link', 'Backend_api_general::sent_reset_password_link');
     $routes->post('general/reset_password', 'Backend_api_general::reset_password');
     $routes->post('general/update_profile', 'Backend_api_general::update_profile');
+    $routes->post('general/upload_image_now', 'Backend_api_general::upload_image_now');
 
     //Setting
     $routes->post('setting/batch_update', 'Backend_api_setting::batch_update');
