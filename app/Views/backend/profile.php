@@ -22,8 +22,8 @@
                     <!-- General Information -->
                     <div class="col-lg-12">
                         <div class="card mb-4">
-                            <div class="card-header bg-secondary text-white">
-                                <h3 class="card-title"><i class="bi bi-info-circle"></i> <b>General Information</b></h3>
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa fa-info-circle"></i> <b>General Information</b></h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -59,8 +59,8 @@
                     <!-- Change Password -->
                     <div class="col-lg-12">
                         <div class="card mb-4">
-                            <div class="card-header bg-secondary text-white">
-                                <h3 class="card-title"> <i class="bi bi-lock"></i> <b>Change Password</b></h3>
+                            <div class="card-header">
+                                <h3 class="card-title"> <i class="fa fa-lock"></i> <b>Change Password</b></h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
