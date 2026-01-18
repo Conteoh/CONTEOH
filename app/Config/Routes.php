@@ -65,4 +65,4 @@ $routes->group(BACKEND_API, function ($routes) use ($module_list) {
 //SYSTEM
 $routes->match(['cli', 'get'], 'gen/(:any)', 'Mvc_generator::$1');
 
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Frontend_general_portal::index');
