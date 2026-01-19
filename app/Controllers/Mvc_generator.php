@@ -419,4 +419,107 @@ class Mvc_generator extends BaseGenerator
 
         $this->module_generation($module_name, $field_list);
     }
+
+    public function module_expenditure_category()
+    {
+        $module_name = "expenditure_category";
+
+        $field_list = [
+            'id' => [
+                'primary_key' => true,
+                'data_type' => 'int',
+                'length' => '11',
+                'NULL' => false,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'ID',
+            ],
+            'is_deleted' => [
+                'primary_key' => false,
+                'data_type' => 'tinyint',
+                'length' => '1',
+                'NULL' => false,
+                'default_value' => '0',
+                'comment' => '',
+                'label' => 'Is Deleted',
+            ],
+            'created_date' => [
+                'primary_key' => false,
+                'data_type' => 'datetime',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Created Date',
+            ],
+            'title' => [
+                'primary_key' => false,
+                'data_type' => 'varchar',
+                'length' => '255',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Title',
+                'input_type' => 'text',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ],  
+            'description' => [
+                'primary_key' => false,
+                'data_type' => 'text',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Description',
+                'input_type' => 'textarea',
+                'show_in_list_page' => false,
+                'show_in_action_page' => true,
+                'compulsory' => false,
+            ], 
+            'priority' => [
+                'primary_key' => false,
+                'data_type' => 'int',
+                'length' => '8',
+                'NULL' => false,
+                'default_value' => '0',
+                'comment' => '',
+                'label' => 'Priority',
+                'input_type' => 'number',
+                'show_in_list_page' => false,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ], 
+            'is_favourite' => [
+                'primary_key' => false,
+                'data_type' => 'tinyint',
+                'length' => '1',
+                'NULL' => false,
+                'default_value' => '0',
+                'comment' => '0=No,1=Yes',
+                'label' => 'Is Favourite',
+                'input_type' => 'select',
+                'option' => [
+                    '0' => 'No',
+                    '1' => 'Yes',
+                ],
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+                'option_yes_no' => true
+            ],
+            'modified_date' => [
+                'primary_key' => false,
+                'data_type' => 'datetime',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Modified Date',
+            ],  
+        ];
+
+        $this->module_generation($module_name, $field_list);
+    }
 }

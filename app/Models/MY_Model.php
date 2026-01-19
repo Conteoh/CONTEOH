@@ -398,20 +398,38 @@ abstract class MY_Model extends Model
         return $is_number;
     }
 
+    public function check_is_number_fields($field_name)
+    {
+        $field_data = $this->db->getFieldData($this->table);
+        $number_types = ['int', 'tinyint', 'smallint', 'mediumint', 'bigint', 'decimal', 'float', 'double'];
+        
+        foreach ($field_data as $field) {
+            if ($field->name === $field_name) {
+                $field_type = strtolower($field->type);
+                // Extract base type (remove length specification like "int(11)" -> "int")
+                $base_type = preg_replace('/\(.*\)/', '', $field_type);
+                return in_array($base_type, $number_types);
+            }
+        }
+        
+        return false;
+    }
+
     //Soft Delete
     public function delete_data($id, $user_id = 0, $origin = "")
     {
         $builder = $this->db->table($this->table);
         $builder->where($this->primaryKey, $id);
-        $builder->update(['is_deleted' => 1, 'modified_date' => date("Y-m-d H:i:s"), 'modified_by' => $user_id]);
+        $builder->update(['is_deleted' => 1, 'modified_date' => date("Y-m-d H:i:s")]);
 
         //Insert Audit Trail
-        $this->Audit_trail_model->insert_data([
+        $Audit_trail_model = model('App\Models\Audit_trail_model');
+        $Audit_trail_model->insert_data([
             "created_date" => date("Y-m-d H:i:s"),
             "user_id" => $user_id,
             "ref_table" => $this->table,
             "ref_id" => $id,
-            "action" => 2,
+            "action_type" => $Audit_trail_model::ACTION_DELETE,
             "origin" => !empty($origin) ? $origin : null,
         ]);
     }

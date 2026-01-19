@@ -103,3 +103,4 @@ define('BACKEND_DELETE_ACTION_REMINDER', 'Are you sure you want to delete this r
 define('BACKEND_DELETE_SUCCESS_MSG', 'Successfully deleted!');
 define('BACKEND_SUBMIT_SUCCESS_MSG', 'Successfully submitted!');
 define('BACKEND_SUBMIT_ACTION_REMINDER', 'Are you sure you want to perform this action?');
+define('BACKEND_REMOVE_ACTION_REMINDER', 'Are you sure you want to remove this record?');

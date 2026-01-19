@@ -357,6 +357,35 @@
                                 </ul>
                             </li>
                         <?php endif; ?>
+
+                        <!--Expenditure Category-->
+                        <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['expenditure_category']) && $my_permission_list['expenditure_category']['can_view'])): ?>
+                            <li class="nav-item <?= $current_module == 'expenditure_category' ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-cutlery"></i>
+                                    <p>
+                                        Expenditure Category
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url(BACKEND_PORTAL . '/expenditure_category/list') ?>" class="nav-link <?= $current_module == 'expenditure_category' && $current_page == 'list' ? 'active' : '' ?>">
+                                            <i class="nav-icon bi bi-list"></i>
+                                            <p>List</p>
+                                        </a>
+                                    </li>
+                                    <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['expenditure_category']) && $my_permission_list['expenditure_category']['can_add'])): ?>
+                                        <li class="nav-item">
+                                            <a href="<?= base_url(BACKEND_PORTAL . '/expenditure_category/add') ?>" class="nav-link <?= $current_module == 'expenditure_category' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
+                                                <i class="nav-icon bi bi-plus"></i>
+                                                <p>Add</p>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>
