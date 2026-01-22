@@ -82,6 +82,22 @@
                                     <input type="text" class="form-control form-control-sm" id="location" name="location" placeholder="Location" ng-model="filter_data.location">
                                 </div>
                             </div>
+									<div class="col-md-12 mb-2">
+                                <div class="form-group">
+                                    <label for="tags">Tags</label>
+                                    <div class="tags-filter-container" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.5rem; min-height: 60px; max-height: 200px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
+                                        <div ng-repeat="(tagKey, tagValue) in tags_kv_list" class="form-check" style="flex: 0 0 auto; margin-bottom: 0; display: flex; align-items: center;">
+                                            <input class="form-check-input" type="checkbox" id="tag_{{tagKey}}" ng-model="filter_data.tags_array[tagKey]" ng-true-value="'{{tagKey}}'" ng-false-value="undefined" ng-change="load_result_list_now()" style="margin-right: 0.25rem; margin-top: 0;">
+                                            <label class="form-check-label" for="tag_{{tagKey}}" style="margin-bottom: 0; padding-left: 0;">
+                                                {{tagValue}}
+                                            </label>
+                                        </div>
+                                        <div ng-if="!tags_kv_list || Object.keys(tags_kv_list).length == 0" class="text-muted" style="width: 100%;">
+                                            No tags available
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                                 </div>
 
@@ -135,14 +151,18 @@
                                         <td title="'Created Date'"><span ng-bind-html="item.created_on"></span></td>
                                         <td title="'ID'">{{item.id}}</td>
                                         <td title="'Expenditure Category'">{{expenditure_category_kv_list[item.expenditure_category_id]}}</td>
-										<td title="'Date'">{{item.date}}</td>
+                                        <td title="'Date'">{{item.date}}</td>
 										<td title="'Title'">{{item.title}}</td>
 										<td title="'Total Amount'">{{item.total_amount}}</td>
 										<td title="'Location'">{{item.location}}</td>
-
+										<td title="'Tags'">
+											<span ng-if="item.tags" ng-repeat="tag in getTagsArray(item.tags)" class="badge badge-primary me-1" style="background-color: #007bff; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; display: inline-block; margin-right: 0.25rem;">
+												{{tag}}
+											</span>
+										</td>
                                     </tr>
                                     <tr ng-if="config_data.total_record == 0">
-                                        <td colspan="8" class="text-center">No data found</td>
+                                        <td colspan="9" class="text-center">No data found</td>
                                     </tr>
                                 </table>
                             </div>
@@ -161,8 +181,29 @@
         $scope.my_login_token = '<?= $my_login_token ?? '' ?>';
 
         $scope.expenditure_category_kv_list = <?= isset($expenditure_category_kv_list) ? json_encode($expenditure_category_kv_list) : '[]' ?>;
+        $scope.tags_kv_list = <?= isset($tags_kv_list) ? json_encode($tags_kv_list) : '[]' ?>;
 								
-        
+        // Function to convert tags string to array
+        $scope.getTagsArray = function(tags) {
+            if (!tags || tags === '') {
+                return [];
+            }
+            try {
+                // Try to parse as JSON array first
+                var parsed = JSON.parse(tags);
+                if (Array.isArray(parsed)) {
+                    return parsed;
+                }
+            } catch (e) {
+                // If parsing fails, treat as comma-separated string
+            }
+            // Treat as comma-separated string
+            return tags.split(',').map(function(tag) {
+                return tag.trim();
+            }).filter(function(tag) {
+                return tag.length > 0;
+            });
+        };
 
         $scope.config_data = {
             'total_record': 0,
@@ -170,15 +211,29 @@
         };
 
         $scope.filter_data = {
-            "id": "<?= $_GET['id'] ?? '' ?>"
+            "id": "<?= $_GET['id'] ?? '' ?>",
+            "tags_array": {}
         };
 
         var Api = $resource("<?= base_url(BACKEND_API . "/" . $current_module . "/list") ?>/" + $scope.my_user_id + "/" + $scope.my_login_token);
         $scope.load_result_list_now = function() {
+            // Convert tags_array object to array of selected tags
+            var filterDataCopy = angular.copy($scope.filter_data);
+            if (filterDataCopy.tags_array) {
+                var selectedTags = [];
+                angular.forEach(filterDataCopy.tags_array, function(value, key) {
+                    if (value) {
+                        selectedTags.push(value);
+                    }
+                });
+                filterDataCopy.tags = selectedTags.length > 0 ? selectedTags.join(',') : '';
+                delete filterDataCopy.tags_array;
+            }
+            
             var tableConfig = {
                 page: 1,
                 count: $scope.config_data.item_per_page,
-                filter: $scope.filter_data
+                filter: filterDataCopy
             };
 
             //如果有Last Page Memory的话，则恢复Last Page Memory
@@ -238,13 +293,27 @@
         }
 
         $scope.reset_filter = function() {
-            $scope.filter_data = {};
+            $scope.filter_data = {
+                "tags_array": {}
+            };
             $scope.load_result_list_now();
         }
 
         $scope.export_now = () => {
             let to_be_submit = angular.copy($scope.filter_data);
             to_be_submit['is_export'] = 1;
+            
+            // Convert tags_array object to tags string for export
+            if (to_be_submit.tags_array) {
+                var selectedTags = [];
+                angular.forEach(to_be_submit.tags_array, function(value, key) {
+                    if (value) {
+                        selectedTags.push(value);
+                    }
+                });
+                to_be_submit.tags = selectedTags.length > 0 ? selectedTags.join(',') : '';
+                delete to_be_submit.tags_array;
+            }
 
             let params = [];
             angular.forEach(to_be_submit, function(value, key) {

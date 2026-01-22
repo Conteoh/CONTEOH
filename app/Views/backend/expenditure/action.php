@@ -74,13 +74,13 @@
                                             <input type="text" class="form-control" id="location" placeholder="Location" ng-model="form_data.location">
                                         </div>
                                     </div>
-                                    <div class="col-md-8 mb-3">
+                                    <div class="col-md-10 mb-3">
                                         <div class="form-group">
                                             <label for="description">Description</label>
                                             <textarea class="form-control" id="description" placeholder="Description" ng-model="form_data.description" rows="5"></textarea>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
+                                    </div>                                    
+                                    <div class="col-md-2 mb-3">
                                         <div class="form-group">
                                             <label for="photo">Photo (300x300PX)</label>
                                             <div>
@@ -93,6 +93,25 @@
                                                 <div class="mt-1">
                                                     <button type="button" id="upload_btn_photo" class="btn btn-secondary btn-sm" ng-click="uploadFiles('300','300','photo')" ng-disabled="form_data.is_uploading_photo==1"><i class="fa fa-upload"></i> Upload <i class="fa fa-spinner fa-spin" ng-if="form_data.is_uploading_photo==1"></i></button>
                                                     <button type="button" class="btn btn-danger btn-sm" ng-click="form_data.photo=''" ng-if="form_data.photo"><i class="fa fa-trash"></i> Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div class="form-group">
+                                            <label for="tags">Tags</label>
+                                            <div class="tags-input-container" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem; min-height: 38px; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; position: relative;">
+                                                <span ng-repeat="tag in form_data.tags_array" class="badge badge-primary" style="background-color: #007bff; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                                    {{tag}}
+                                                    <span ng-click="removeTag($index)" style="cursor: pointer; font-weight: bold;">&times;</span>
+                                                </span>
+                                                <div style="flex: 1; min-width: 150px; position: relative;">
+                                                    <input type="text" class="form-control border-0" id="tags" placeholder="Type to search tags..." ng-model="form_data.tag_input" ng-keydown="handleTagInput($event)" ng-keyup="searchTagSuggestions()" ng-focus="onTagInputFocus()" ng-blur="onTagInputBlur()" style="border: none !important; outline: none; box-shadow: none;">
+                                                    <div ng-if="showSuggestions && tagSuggestions.length > 0" class="tag-suggestions-dropdown" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ced4da; border-top: none; border-radius: 0 0 0.25rem 0.25rem; max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                                        <div ng-repeat="suggestion in tagSuggestions" ng-click="selectTagSuggestion(suggestion)" ng-mousedown="$event.preventDefault()" style="padding: 0.5rem 0.75rem; cursor: pointer; border-bottom: 1px solid #f0f0f0; color: #212529; background-color: white;" ng-mouseenter="$event.target.style.backgroundColor='#e9ecef'; $event.target.style.color='#212529';" ng-mouseleave="$event.target.style.backgroundColor='white'; $event.target.style.color='#212529';">
+                                                            {{suggestion}}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -129,8 +148,13 @@
         //Load Kv List
 
         $scope.expenditure_category_kv_info = <?= isset($expenditure_category_kv_info) ? json_encode($expenditure_category_kv_info) : '[]' ?>;
+        $scope.tags_kv_list = <?= isset($tags_kv_list) ? json_encode($tags_kv_list) : '[]' ?>;
 
         $scope.id = <?= (isset($id) && !empty($id)) ? $id : 0 ?>;
+        
+        // Tag suggestions
+        $scope.tagSuggestions = [];
+        $scope.showSuggestions = false;
 
         if ($scope.id && $scope.id > 0) {
             $scope.form_data = <?= isset($result_data) ? json_encode($result_data) : "[]" ?>;
@@ -144,6 +168,33 @@
                 $scope.form_data.total_amount = parseFloat($scope.form_data.total_amount);
             }
 
+            // Initialize tags array from tags string
+            if ($scope.form_data.tags) {
+                try {
+                    // Try to parse as JSON array first
+                    var parsed = JSON.parse($scope.form_data.tags);
+                    if (Array.isArray(parsed)) {
+                        $scope.form_data.tags_array = parsed;
+                    } else {
+                        // If not JSON, treat as comma-separated string
+                        $scope.form_data.tags_array = $scope.form_data.tags.split(',').map(function(tag) {
+                            return tag.trim();
+                        }).filter(function(tag) {
+                            return tag.length > 0;
+                        });
+                    }
+                } catch (e) {
+                    // If parsing fails, treat as comma-separated string
+                    $scope.form_data.tags_array = $scope.form_data.tags.split(',').map(function(tag) {
+                        return tag.trim();
+                    }).filter(function(tag) {
+                        return tag.length > 0;
+                    });
+                }
+            } else {
+                $scope.form_data.tags_array = [];
+            }
+            $scope.form_data.tag_input = '';
 
         } else {
             $scope.form_data = {
@@ -153,9 +204,182 @@
                 "date": new Date(),
                 "expenditure_category_id": "0",
                 "total_amount": 0.00,
+                "tags_array": [],
+                "tag_input": ""
 
             };
         }
+
+        // On tag input focus
+        $scope.onTagInputFocus = function() {
+            var query = $scope.form_data.tag_input.trim();
+            if (query.length > 0) {
+                $scope.searchTagSuggestions();
+            } else {
+                // Show all available tags when input is empty
+                $scope.loadAllTagSuggestions();
+            }
+        };
+
+        // Track if suggestion is being clicked to prevent blur from closing dropdown
+        $scope.isClickingSuggestion = false;
+        
+        // On tag input blur (with delay to allow click events)
+        $scope.onTagInputBlur = function() {
+            // Use timeout to allow click events on suggestions to fire first
+            $timeout(function() {
+                if (!$scope.isClickingSuggestion) {
+                    $scope.showSuggestions = false;
+                }
+                $scope.isClickingSuggestion = false;
+            }, 200);
+        };
+
+        // Load all tag suggestions
+        $scope.loadAllTagSuggestions = function() {
+            var allSuggestions = [];
+            angular.forEach($scope.tags_kv_list, function(value, key) {
+                // Check if tag is not already added
+                if ($scope.form_data.tags_array.indexOf(value) === -1) {
+                    allSuggestions.push(value);
+                }
+            });
+            $scope.tagSuggestions = allSuggestions.slice(0, 20); // Limit to 20 suggestions
+            $scope.showSuggestions = $scope.tagSuggestions.length > 0;
+        };
+
+        // Search tag suggestions
+        $scope.searchTagSuggestions = function() {
+            var query = $scope.form_data.tag_input.trim();
+            
+            if (query.length === 0) {
+                $scope.loadAllTagSuggestions();
+                return;
+            }
+
+            // Filter from local tags list first
+            var localSuggestions = [];
+            angular.forEach($scope.tags_kv_list, function(value, key) {
+                if (value.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+                    // Check if tag is not already added
+                    if ($scope.form_data.tags_array.indexOf(value) === -1) {
+                        localSuggestions.push(value);
+                    }
+                }
+            });
+
+            // Also fetch from API for more suggestions
+            $http.get("<?= base_url(BACKEND_API . '/' . $current_module . '/get_tag_suggestions') ?>/" + $scope.my_user_id + "/" + $scope.my_login_token + "?query=" + encodeURIComponent(query)).then(function(response) {
+                if (response.data.status == "SUCCESS") {
+                    var apiSuggestions = response.data.result || [];
+                    // Merge and deduplicate
+                    var allSuggestions = localSuggestions.concat(apiSuggestions);
+                    var uniqueSuggestions = [];
+                    var seen = {};
+                    angular.forEach(allSuggestions, function(suggestion) {
+                        if (!seen[suggestion] && $scope.form_data.tags_array.indexOf(suggestion) === -1) {
+                            seen[suggestion] = true;
+                            uniqueSuggestions.push(suggestion);
+                        }
+                    });
+                    $scope.tagSuggestions = uniqueSuggestions.slice(0, 10); // Limit to 10 suggestions
+                    $scope.showSuggestions = $scope.tagSuggestions.length > 0;
+                }
+            }, function(response) {
+                // If API fails, use local suggestions
+                $scope.tagSuggestions = localSuggestions.slice(0, 10);
+                $scope.showSuggestions = $scope.tagSuggestions.length > 0;
+            });
+        };
+
+        // Select tag from suggestion
+        $scope.selectTagSuggestion = function(suggestion) {
+            $scope.isClickingSuggestion = true;
+            if (suggestion && suggestion.trim().length > 0) {
+                if ($scope.form_data.tags_array.indexOf(suggestion) === -1) {
+                    $scope.form_data.tags_array.push(suggestion);
+                }
+                $scope.form_data.tag_input = '';
+                $scope.tagSuggestions = [];
+                $scope.showSuggestions = false;
+                // Remove focus from input
+                var inputElement = document.getElementById('tags');
+                if (inputElement) {
+                    inputElement.blur();
+                }
+            }
+        };
+
+        // Handle tag input (Enter key and arrow keys)
+        $scope.handleTagInput = function(event) {
+            if (event.keyCode === 13) { // Enter key
+                event.preventDefault();
+                var tagValue = $scope.form_data.tag_input.trim();
+                if (tagValue && tagValue.length > 0) {
+                    // Check if tag already exists
+                    if ($scope.form_data.tags_array.indexOf(tagValue) === -1) {
+                        $scope.form_data.tags_array.push(tagValue);
+                    }
+                    $scope.form_data.tag_input = '';
+                    $scope.tagSuggestions = [];
+                    $scope.showSuggestions = false;
+                }
+            } else if (event.keyCode === 27) { // Escape key
+                $scope.showSuggestions = false;
+            }
+        };
+
+        // Add tag function (kept for backward compatibility)
+        $scope.addTag = function(event) {
+            $scope.handleTagInput(event);
+        };
+        
+        // Hide suggestions when clicking outside
+        var clickHandler = function(e) {
+            var target = e.target;
+            var container = null;
+            
+            // Use native DOM closest method
+            if (target && target.closest) {
+                container = target.closest('.tags-input-container');
+            } else {
+                // Fallback: traverse up the DOM tree
+                var element = target;
+                while (element && element !== document.body) {
+                    if (element.classList && element.classList.contains('tags-input-container')) {
+                        container = element;
+                        break;
+                    }
+                    element = element.parentElement;
+                }
+            }
+            
+            // If click is outside the container, hide suggestions
+            if (!container) {
+                if (!$scope.$$phase && !$scope.$root.$$phase) {
+                    $scope.$apply(function() {
+                        $scope.showSuggestions = false;
+                    });
+                } else {
+                    $scope.showSuggestions = false;
+                }
+            }
+        };
+        
+        // Use timeout to ensure DOM is ready
+        $timeout(function() {
+            document.addEventListener('click', clickHandler);
+        }, 0);
+        
+        // Clean up on scope destroy
+        $scope.$on('$destroy', function() {
+            document.removeEventListener('click', clickHandler);
+        });
+
+        // Remove tag function
+        $scope.removeTag = function(index) {
+            $scope.form_data.tags_array.splice(index, 1);
+        };
 
         $scope.back_now = function() {
             if ($scope.result_form.$dirty) {
@@ -182,6 +406,12 @@
                 $scope.form_data.date_temp = $("#date").val();
             }
 
+            // Convert tags array to comma-separated string
+            if ($scope.form_data.tags_array && $scope.form_data.tags_array.length > 0) {
+                $scope.form_data.tags = $scope.form_data.tags_array.join(',');
+            } else {
+                $scope.form_data.tags = '';
+            }
 
             var to_be_submit = angular.copy($scope.form_data);
 

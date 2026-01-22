@@ -49,6 +49,9 @@ $routes->group(BACKEND_API, function ($routes) use ($module_list) {
             $routes->delete('delete/(:num)', 'Backend_api_' . $module . '::delete/$1');
         });
     }
+    
+    // Expenditure specific routes
+    $routes->get('expenditure/get_tag_suggestions/(:num)/(:any)', 'Backend_api_expenditure::get_tag_suggestions/$1/$2');
 
     //General
     $routes->post('general/login_submit', 'Backend_api_general::login_submit');
