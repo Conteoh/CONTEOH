@@ -225,7 +225,7 @@
 
             formdata.append("width", width);
             formdata.append("height", height);
-            formdata.append("crop", "lpad");
+            formdata.append("crop", "fill");
             formdata.append("field_name", field_id);
             formdata.append("my_user_id", $scope.my_user_id);
             formdata.append("my_login_token", $scope.my_login_token);
