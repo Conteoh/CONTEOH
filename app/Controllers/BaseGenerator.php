@@ -890,6 +890,7 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
                                 <div class="form-group">
                                     <label for="' . ($k) . '">' . ($v['label']) . '</label>
                                     <select class="form-control" id="' . ($k) . '" ng-model="form_data.' . ($k) . '" ' . ((isset($v['compulsory']) && $v['compulsory'] == true) ? 'required' : '') . ' ' . ((isset($v['disabled']) && $v['disabled'] == true) ? 'disabled' : '') . '>
+                                        <option value="0">NONE</option>
                                         <option value="{{item.id}}" ng-repeat="item in ' . $v['bind_module'] . '_kv_info">{{item.title}}</option>
                                     </select>
                                 </div>

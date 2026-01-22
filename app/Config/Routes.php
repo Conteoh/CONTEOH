@@ -13,6 +13,7 @@ $module_list = [
     'enquiry',
     'page',
     'expenditure_category',
+    'expenditure',
 ];
 
 //BACKEND PORTAL (Logged In)
