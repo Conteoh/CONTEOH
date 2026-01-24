@@ -914,4 +914,124 @@ class Mvc_generator extends BaseGenerator
 
         $this->module_generation($module_name, $field_list);
     }
+
+    public function module_jogging()
+    {
+        $module_name = "jogging";
+
+        $field_list = [
+            'id' => [
+                'primary_key' => true,
+                'data_type' => 'int',
+                'length' => '11',
+                'NULL' => false,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'ID',
+            ],
+            'is_deleted' => [
+                'primary_key' => false,
+                'data_type' => 'tinyint',
+                'length' => '1',
+                'NULL' => false,
+                'default_value' => '0',
+                'comment' => '',
+                'label' => 'Is Deleted',
+            ],
+            'created_date' => [
+                'primary_key' => false,
+                'data_type' => 'datetime',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Created Date',
+            ],  
+            'date' => [
+                'primary_key' => false,
+                'data_type' => 'date',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Date',
+                'input_type' => 'date',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ],  
+            'section' => [
+                'primary_key' => false,
+                'data_type' => 'tinyint',
+                'length' => '2',
+                'NULL' => false,
+                'default_value' => '0',
+                'comment' => '0=Morning,1=Afternoon,2=Evening,3=Night',
+                'label' => 'Status',
+                'input_type' => 'select',
+                'option' => [
+                    '0' => 'Morning',
+                    '1' => 'Afternoon',
+                    '2' => 'Evening',
+                    '3' => 'Night',
+                ],
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+                'option_yes_no' => false
+            ],
+            'distance_in_km' => [
+                'primary_key' => false,
+                'data_type' => 'decimal',
+                'length' => '10,2',
+                'NULL' => false,
+                'default_value' => '0.00',
+                'comment' => '',
+                'label' => 'Distance in KM',
+                'input_type' => 'number',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ],                
+            'location' => [
+                'primary_key' => false,
+                'data_type' => 'varchar',
+                'length' => '255',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Location',
+                'input_type' => 'text',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => false,
+            ],  
+            'photo' => [
+                'primary_key' => false,
+                'data_type' => 'varchar',
+                'length' => '255',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '300x300PX',
+                'label' => 'Photo',
+                'input_type' => 'file',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => false,
+                'width' => '500',
+                'height' => '500',
+            ],
+            'modified_date' => [
+                'primary_key' => false,
+                'data_type' => 'datetime',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Modified Date',
+            ],  
+        ];
+
+        $this->module_generation($module_name, $field_list);
+    }
 }
