@@ -26,7 +26,9 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#home">Portfolio</a>
+            <a class="navbar-brand" href="<?= base_url() ?>">
+                <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" width="150" class="img-fluid">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -86,7 +88,7 @@
                 <p>Get to know more about my background and expertise</p>
             </div>
             <div class="row align-items-center">
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     <div class="about-text fade-in-up">
                         <p>
                             I'm a passionate <span class="highlight">Fullstack Web Developer</span> based in Johor Bahru, Malaysia, 
@@ -105,10 +107,10 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="about-image fade-in-up">
-                        <div style="background: linear-gradient(135deg, #005c5a, #007a77); height: 400px; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 92, 90, 0.2);">
-                            <i class="bi bi-code-slash" style="font-size: 8rem; color: rgba(255, 255, 255, 0.3);"></i>
+                        <div style="background: linear-gradient(135deg, #005c5a, #007a77); height: 400px; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 92, 90, 0.2); overflow: hidden;">
+                            <img src="<?= base_url('assets/img/my-photo.jpeg') ?>" alt="About" width="100%" height="100%" style="border-radius: 20px; object-fit: cover; object-position: 30% center;">
                         </div>
                     </div>
                 </div>
