@@ -14,7 +14,8 @@ $module_list = [
     'page',
     'expenditure_category',
     'expenditure',
-    'book'
+    'book',
+    'car_maintenance',
 ];
 
 //BACKEND PORTAL (Logged In)
@@ -53,6 +54,9 @@ $routes->group(BACKEND_API, function ($routes) use ($module_list) {
     
     // Expenditure specific routes
     $routes->get('expenditure/get_tag_suggestions/(:num)/(:any)', 'Backend_api_expenditure::get_tag_suggestions/$1/$2');
+    
+    // Car maintenance specific routes
+    $routes->get('car_maintenance/get_tag_suggestions/(:num)/(:any)', 'Backend_api_car_maintenance::get_tag_suggestions/$1/$2');
 
     //General
     $routes->post('general/login_submit', 'Backend_api_general::login_submit');

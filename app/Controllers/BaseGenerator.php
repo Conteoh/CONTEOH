@@ -917,15 +917,31 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
                                 <div class="form-group">
                                     <label for="' . ($k) . '">' . ($v['label']) . $upload_reminder . '</label>
                                     <div>
-                                        <div class="mb-1" ng-if="form_data.' . ($k) . '">
-                                            <a href="{{form_data.' . ($k) . '}}" target="_blank"><img ng-src="{{form_data.' . ($k) . '}}" id="' . ($k) . '_photo" class="img-fluid" /></a>
-                                        </div>
                                         <input type="file" class="form-control" id="' . ($k) . '" ng-files="getTheFiles($files,\'' . ($k) . '\')" ng-disabled="form_data.is_uploading_' . ($k) . '==1" />
                                         <input type="text" style="display:none" ng-model="form_data.' . ($k) . '" />
-
-                                        <div class="mt-1">
-                                            <button type="button" id="upload_btn_' . ($k) . '" class="btn btn-secondary btn-sm" ng-click="uploadFiles(\'' . ($v['width']) . '\',\'' . ($v['height']) . '\',\'' . ($k) . '\')" ng-disabled="form_data.is_uploading_' . ($k) . '==1"><i class="fa fa-upload"></i> Upload <i class="fa fa-spinner fa-spin" ng-if="form_data.is_uploading_' . ($k) . '==1"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm" ng-click="form_data.' . ($k) . '=\'\'" ng-if="form_data.' . ($k) . '"><i class="fa fa-trash"></i> Remove</button>
+                                        <button type="button" id="upload_btn_' . ($k) . '" ng-click="uploadFiles(\'' . ($v['width']) . '\',\'' . ($v['height']) . '\',\'' . ($k) . '\')" style="display: none;"></button>
+                                        
+                                        <div ng-if="form_data.' . ($k) . ' || form_data.is_uploading_' . ($k) . '" class="mt-2 text-start">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <!--Show loading spinner when uploading-->
+                                                    <div ng-if="form_data.is_uploading_' . ($k) . '" class="attachment-upload-loading text-center">
+                                                        <i class="fa fa-spinner fa-spin text-primary"></i>
+                                                    </div>
+                                                    <!--Show Image thumbnail or document icon based on the file type-->
+                                                    <a ng-if="!form_data.is_uploading_' . ($k) . ' && isImageFile(form_data.' . ($k) . ')" ng-href="{{form_data.' . ($k) . '}}" target="_blank">
+                                                        <img ng-src="{{form_data.' . ($k) . '}}" class="attachment-upload-image" />
+                                                    </a>
+                                                    <a ng-if="!form_data.is_uploading_' . ($k) . ' && !isImageFile(form_data.' . ($k) . ')" ng-href="{{form_data.' . ($k) . '}}" target="_blank" class="attachment-upload-icon-wrapper text-center">
+                                                        <i class="fa fa-file-o text-secondary"></i>
+                                                    </a>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="No file chosen" value="{{form_data.' . ($k) . ' ? form_data.' . ($k) . '.split(\'/\').pop() : \'\'}}" readonly>
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-secondary attachment-upload-copy-btn" ng-click="copy_document_path(form_data.' . ($k) . ')" ng-disabled="form_data.is_uploading_' . ($k) . '"><i class="fa fa-copy"></i></button>
+                                                    <button type="button" class="btn btn-danger attachment-upload-delete-btn" ng-click="form_data.' . ($k) . '=\'\'; result_form.$setDirty()" ng-disabled="form_data.is_uploading_' . ($k) . '"><i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1157,6 +1173,39 @@ class Backend_api_' . ($module_name) . ' extends BaseResourceController
             formdata.append(field_id, $files[0]);
             $(\'#upload_btn_\' + field_id).click();
         };
+
+        // Check if file is an image
+        $scope.isImageFile = function(filePath) {
+            if (!filePath) return false;
+            var imageExtensions = [\'.jpg\', \'.jpeg\', \'.png\', \'.gif\', \'.bmp\', \'.webp\', \'.svg\'];
+            var lowerPath = filePath.toLowerCase();
+            // Check if path contains image extension
+            return imageExtensions.some(function(ext) {
+                return lowerPath.indexOf(ext) !== -1;
+            });
+        }
+
+        // Copy document path to clipboard
+        $scope.copy_document_path = function(documentPath) {
+            if (!documentPath) return;
+            
+            // Create a temporary textarea element
+            var textarea = document.createElement(\'textarea\');
+            textarea.value = documentPath;
+            textarea.style.position = \'fixed\';
+            textarea.style.opacity = \'0\';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand(\'copy\');
+                alert(\'Document path copied to clipboard!\');
+            } catch (err) {
+                alert(\'Failed to copy document path\');
+            }
+            
+            document.body.removeChild(textarea);
+        }
 
         $scope.uploadFiles = function(width, height, field_id, fieldName, is_list, index) {
 

@@ -306,7 +306,7 @@ abstract class BaseResourceController extends \CodeIgniter\RESTful\ResourceContr
         }
     }
 
-    private function export_to_csv($result_list = [])
+    public function export_to_csv($result_list = [])
     {
         $header_list = [];
         $body_list = [];

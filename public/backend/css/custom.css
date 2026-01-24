@@ -21,3 +21,55 @@
     display: inline-block;
     line-height: 1;
 }
+
+/* Attachment upload styles */
+.attachment-upload-loading {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #ced4da;
+    border-right: none;
+    border-radius: 0.25rem 0 0 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+}
+
+.attachment-upload-image {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border: 1px solid #ced4da;
+    border-right: none;
+    border-radius: 0.25rem 0 0 0.25rem;
+    display: block;
+    cursor: pointer;
+}
+
+.attachment-upload-icon-wrapper {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #ced4da;
+    border-right: none;
+    border-radius: 0.25rem 0 0 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.attachment-upload-copy-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px;
+    border-left: 0 !important;
+}
+
+.attachment-upload-delete-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px;
+    border-left: 0 !important;
+}

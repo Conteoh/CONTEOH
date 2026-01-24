@@ -12,6 +12,8 @@ class Backend_api_expenditure extends BaseResourceController
 {
     use ResponseTrait;
 
+    protected $Tag_model;
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);

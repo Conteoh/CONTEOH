@@ -444,6 +444,35 @@
                                 </ul>
                             </li>
                         <?php endif; ?>
+
+                        <!--Car Maintenance-->
+                        <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['car_maintenance']) && $my_permission_list['car_maintenance']['can_view'])): ?>
+                            <li class="nav-item <?= $current_module == 'car_maintenance' ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon bi bi-car-front"></i>
+                                    <p>
+                                        Car Maintenance
+                                        <i class="nav-arrow bi bi-chevron-right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url(BACKEND_PORTAL . '/car_maintenance/list') ?>" class="nav-link <?= $current_module == 'car_maintenance' && $current_page == 'list' ? 'active' : '' ?>">
+                                            <i class="nav-icon bi bi-list"></i>
+                                            <p>List</p>
+                                        </a>
+                                    </li>
+                                    <?php if (!$site_config['backend_check_permission'] || (isset($my_permission_list['car_maintenance']) && $my_permission_list['car_maintenance']['can_add'])): ?>
+                                        <li class="nav-item">
+                                            <a href="<?= base_url(BACKEND_PORTAL . '/car_maintenance/add') ?>" class="nav-link <?= $current_module == 'car_maintenance' && ($current_page == 'add' || $current_page == 'edit') ? 'active' : '' ?>">
+                                                <i class="nav-icon bi bi-plus"></i>
+                                                <p>Add</p>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>

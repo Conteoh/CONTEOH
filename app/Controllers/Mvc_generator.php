@@ -803,4 +803,115 @@ class Mvc_generator extends BaseGenerator
 
         $this->module_generation($module_name, $field_list);
     }
+
+    public function module_car_maintenance()
+    {
+        $module_name = "car_maintenance";
+
+        $field_list = [
+            'id' => [
+                'primary_key' => true,
+                'data_type' => 'int',
+                'length' => '11',
+                'NULL' => false,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'ID',
+            ],
+            'is_deleted' => [
+                'primary_key' => false,
+                'data_type' => 'tinyint',
+                'length' => '1',
+                'NULL' => false,
+                'default_value' => '0',
+                'comment' => '',
+                'label' => 'Is Deleted',
+            ],
+            'created_date' => [
+                'primary_key' => false,
+                'data_type' => 'datetime',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Created Date',
+            ],                    
+            'title' => [
+                'primary_key' => false,
+                'data_type' => 'varchar',
+                'length' => '255',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Title',
+                'input_type' => 'text',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ],  
+            'description' => [
+                'primary_key' => false,
+                'data_type' => 'text',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Description',
+                'input_type' => 'textarea',
+                'show_in_list_page' => false,
+                'show_in_action_page' => true,
+                'compulsory' => false,
+            ], 
+            'date' => [
+                'primary_key' => false,
+                'data_type' => 'date',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Date',
+                'input_type' => 'date',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ],
+            'total_amount' => [
+                'primary_key' => false,
+                'data_type' => 'decimal',
+                'length' => '10,2',
+                'NULL' => false,
+                'default_value' => '0.00',
+                'comment' => '',
+                'label' => 'Price',
+                'input_type' => 'number',
+                'show_in_list_page' => true,
+                'show_in_action_page' => true,
+                'compulsory' => true,
+            ],  
+            'tags' => [
+                'primary_key' => false,
+                'data_type' => 'text',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Tags',
+                'input_type' => 'textarea',
+                'show_in_list_page' => false,
+                'show_in_action_page' => false,
+                'compulsory' => false,
+            ], 
+            'modified_date' => [
+                'primary_key' => false,
+                'data_type' => 'datetime',
+                'length' => '',
+                'NULL' => true,
+                'default_value' => '',
+                'comment' => '',
+                'label' => 'Modified Date',
+            ],  
+        ];
+
+        $this->module_generation($module_name, $field_list);
+    }
 }
