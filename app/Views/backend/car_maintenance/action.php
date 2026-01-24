@@ -245,14 +245,6 @@
                 "tags_array": [],
                 "tag_input": ""
             };
-
-            $scope.attachment_list = [{
-                'id': 0,
-                'is_deleted': '0',
-                'title': '',
-                'document_path': 'https://res.cloudinary.com/dbad4x28k/image/upload/v1769230803/qg6k1um4digbv7cfmqk4.pdf',
-                'created_date': ''
-            }];
         }
 
         // On tag input focus
@@ -448,9 +440,11 @@
             $scope.result_form.$setDirty();
         }
 
+        /*
         $scope.upload_attachment_document = function(index) {
             $("#document_path_" + index).click();
         }
+        */
 
         // Check if file is an image
         $scope.isImageFile = function(filePath) {
