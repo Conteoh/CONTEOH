@@ -14,6 +14,7 @@ $module_list = [
     'page',
     'expenditure_category',
     'expenditure',
+    'book'
 ];
 
 //BACKEND PORTAL (Logged In)
