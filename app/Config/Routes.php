@@ -16,7 +16,8 @@ $module_list = [
     'expenditure',
     'book',
     'car_maintenance',
-    'jogging'
+    'jogging',
+    'jogging_target'
 ];
 
 //BACKEND PORTAL (Logged In)
