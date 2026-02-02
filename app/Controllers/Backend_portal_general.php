@@ -11,6 +11,17 @@ class Backend_portal_general extends MY_Backend
 
     public function index()
     {
+        $current_year = (int) date('Y');
+        $Jogging_target_model = model('App\Models\Jogging_target_model');
+        $Jogging_model = model('App\Models\Jogging_model');
+
+        $jogging_target = $Jogging_target_model->get_one(['year' => $current_year, 'is_deleted' => 0]);
+        $jogging_monthly_totals = $Jogging_model->get_monthly_totals_by_year($current_year);
+
+        $this->data['current_year'] = $current_year;
+        $this->data['jogging_target'] = $jogging_target;
+        $this->data['jogging_monthly_totals'] = $jogging_monthly_totals;
+
         return view('backend/header', $this->data) . view('backend/index', $this->data) . view('backend/footer', $this->data);
     }
 
