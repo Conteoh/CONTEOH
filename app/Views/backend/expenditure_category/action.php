@@ -67,6 +67,59 @@
                                             <textarea class="form-control" id="description" placeholder="Description" ng-model="form_data.description" rows="5"></textarea>
                                         </div>
                                     </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="track_expenses">Track Expenses</label>
+                                            <select class="form-control" id="track_expenses" ng-model="form_data.track_expenses" required>
+                                                <option value="{{item.id}}" ng-repeat="item in yes_no_kv_info">{{item.title}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="monthly_limit_amount">Monthly Limit Amount</label>
+                                            <input type="number" step="0.01" min="0" class="form-control" id="monthly_limit_amount" ng-model="form_data.monthly_limit_amount" placeholder="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-group">
+                                            <label for="weekly_limit_amount">Weekly Limit Amount</label>
+                                            <input type="number" step="0.01" min="0" class="form-control" id="weekly_limit_amount" ng-model="form_data.weekly_limit_amount" placeholder="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-2"><label class="mb-0"><b>Daily Limit Amount</b></label></div>
+                                    <div class="col-md-12 mb-3">
+                                        <div class="row">
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_mon" class="small">Mon</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_mon" ng-model="form_data.daily_limit_amount_mon" placeholder="0">
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_tue" class="small">Tue</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_tue" ng-model="form_data.daily_limit_amount_tue" placeholder="0">
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_wed" class="small">Wed</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_wed" ng-model="form_data.daily_limit_amount_wed" placeholder="0">
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_thu" class="small">Thu</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_thu" ng-model="form_data.daily_limit_amount_thu" placeholder="0">
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_fri" class="small">Fri</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_fri" ng-model="form_data.daily_limit_amount_fri" placeholder="0">
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_sat" class="small">Sat</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_sat" ng-model="form_data.daily_limit_amount_sat" placeholder="0">
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="daily_limit_amount_sun" class="small">Sun</label>
+                                                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="daily_limit_amount_sun" ng-model="form_data.daily_limit_amount_sun" placeholder="0">
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -156,6 +209,14 @@
             if ($scope.form_data.priority) {
                 $scope.form_data.priority = parseInt($scope.form_data.priority);
             }
+            var limit_amount_fields = ['monthly_limit_amount', 'weekly_limit_amount', 'daily_limit_amount_mon', 'daily_limit_amount_tue', 'daily_limit_amount_wed', 'daily_limit_amount_thu', 'daily_limit_amount_fri', 'daily_limit_amount_sat', 'daily_limit_amount_sun'];
+            limit_amount_fields.forEach(function(f) {
+                if ($scope.form_data[f] !== undefined && $scope.form_data[f] !== null && $scope.form_data[f] !== '') {
+                    $scope.form_data[f] = parseFloat($scope.form_data[f]);
+                } else {
+                    $scope.form_data[f] = 0;
+                }
+            });
 
             $scope.suggestion_list = <?= isset($suggestion_list) ? json_encode($suggestion_list) : "[]" ?>;
             if ($scope.suggestion_list && $scope.suggestion_list.length != 0) {
@@ -173,7 +234,17 @@
 
                 "priority": 0,
                 "is_favourite": "0",
+                "track_expenses": "0",
 
+                "monthly_limit_amount": 0,
+                "weekly_limit_amount": 0,
+                "daily_limit_amount_mon": 0,
+                "daily_limit_amount_tue": 0,
+                "daily_limit_amount_wed": 0,
+                "daily_limit_amount_thu": 0,
+                "daily_limit_amount_fri": 0,
+                "daily_limit_amount_sat": 0,
+                "daily_limit_amount_sun": 0
             };
         }
 

@@ -43,6 +43,16 @@ class Backend_api_expenditure_category extends BaseResourceController
                 $description = $this->request->getVar("description");
                 $priority = $this->request->getVar("priority");
                 $is_favourite = $this->request->getVar("is_favourite");
+                $track_expenses = $this->request->getVar("track_expenses");
+                $monthly_limit_amount = $this->request->getVar("monthly_limit_amount");
+                $weekly_limit_amount = $this->request->getVar("weekly_limit_amount");
+                $daily_limit_amount_mon = $this->request->getVar("daily_limit_amount_mon");
+                $daily_limit_amount_tue = $this->request->getVar("daily_limit_amount_tue");
+                $daily_limit_amount_wed = $this->request->getVar("daily_limit_amount_wed");
+                $daily_limit_amount_thu = $this->request->getVar("daily_limit_amount_thu");
+                $daily_limit_amount_fri = $this->request->getVar("daily_limit_amount_fri");
+                $daily_limit_amount_sat = $this->request->getVar("daily_limit_amount_sat");
+                $daily_limit_amount_sun = $this->request->getVar("daily_limit_amount_sun");
                 $suggestion_list = isset($_POST['suggestion_list']) && !empty($_POST['suggestion_list']) ? $_POST['suggestion_list'] : [];
 
                 $submit_data = [
@@ -50,6 +60,16 @@ class Backend_api_expenditure_category extends BaseResourceController
                     "description" => !empty($description) ? $description : null,
                     "priority" => !empty($priority) ? $priority : 0,
                     "is_favourite" => !empty($is_favourite) ? $is_favourite : 0,
+                    "track_expenses" => !empty($track_expenses) ? $track_expenses : 0,
+                    "monthly_limit_amount" => !empty($monthly_limit_amount) ? $monthly_limit_amount : 0,
+                    "weekly_limit_amount" => !empty($weekly_limit_amount) ? $weekly_limit_amount : 0,
+                    "daily_limit_amount_mon" => !empty($daily_limit_amount_mon) ? $daily_limit_amount_mon : 0,
+                    "daily_limit_amount_tue" => !empty($daily_limit_amount_tue) ? $daily_limit_amount_tue : 0,
+                    "daily_limit_amount_wed" => !empty($daily_limit_amount_wed) ? $daily_limit_amount_wed : 0,
+                    "daily_limit_amount_thu" => !empty($daily_limit_amount_thu) ? $daily_limit_amount_thu : 0,
+                    "daily_limit_amount_fri" => !empty($daily_limit_amount_fri) ? $daily_limit_amount_fri : 0,
+                    "daily_limit_amount_sat" => !empty($daily_limit_amount_sat) ? $daily_limit_amount_sat : 0,
+                    "daily_limit_amount_sun" => !empty($daily_limit_amount_sun) ? $daily_limit_amount_sun : 0,
                 ];
 
                 // $this->Main_model->transStart();

@@ -1,3 +1,20 @@
+/* Dark theme: no white background on dashboard cards & tables */
+[data-bs-theme="dark"] .app-main .card,
+[data-bs-theme="dark"] .app-main .card .card-body {
+    background-color: var(--bs-body-bg);
+}
+[data-bs-theme="dark"] .app-main .card .table,
+[data-bs-theme="dark"] .app-main .card .table thead,
+[data-bs-theme="dark"] .app-main .card .table tbody,
+[data-bs-theme="dark"] .app-main .card .table tfoot {
+    background-color: transparent;
+    color: inherit;
+}
+[data-bs-theme="dark"] .app-main .card .table-bordered th,
+[data-bs-theme="dark"] .app-main .card .table-bordered td {
+    border-color: var(--bs-border-color);
+}
+
 .b-result-list-table {
     min-width: 1000px;
 }

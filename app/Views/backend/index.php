@@ -39,6 +39,40 @@
                     <!-- /.card -->
                 </div>
                 <div class="col-lg-12">
+                    <?php
+                    $expenditure_totals = $expenditure_totals ?? ['today' => 0, 'week' => 0, 'month' => 0];
+                    ?>
+                    <div class="card mb-4">
+                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0"><i class="bi bi-cash-stack"></i> Expenditure Analysis</h3>
+                            <a href="<?= base_url(BACKEND_PORTAL . '/expenditure/list') ?>" class="btn btn-sm btn-outline-primary ms-auto">View List</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="border rounded p-3 bg-body-secondary">
+                                        <div class="text-muted small text-uppercase mb-1">当日 Today</div>
+                                        <div class="h4 mb-0"><?= number_format($expenditure_totals['today'], 2) ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="border rounded p-3 bg-body-secondary">
+                                        <div class="text-muted small text-uppercase mb-1">当周 This Week</div>
+                                        <div class="h4 mb-0"><?= number_format($expenditure_totals['week'], 2) ?></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="border rounded p-3 bg-body-secondary">
+                                        <div class="text-muted small text-uppercase mb-1">当月 This Month</div>
+                                        <div class="h4 mb-0"><?= number_format($expenditure_totals['month'], 2) ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-header border-0 d-flex justify-content-between align-items-center">
                             <h3 class="card-title mb-0"><i class="bi bi-bullseye"></i> Jogging Target & Progress (<?= (int)($current_year ?? date('Y')) ?>)</h3>
